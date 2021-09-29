@@ -1,9 +1,11 @@
 package com.example.RoleBasedJwtAuthentication.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity(name ="zone")
 @Getter
@@ -22,5 +24,9 @@ public class Zone {
 
     @Column
     private String state;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "universityId", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<University> universityList;
 
 }
