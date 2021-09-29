@@ -1,0 +1,23 @@
+package com.example.RoleBasedJwtAuthentication.Controller;
+
+import com.example.RoleBasedJwtAuthentication.Dto.CollegeDto;
+import com.example.RoleBasedJwtAuthentication.Service.CollegeService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequiredArgsConstructor
+public class CollegeController {
+
+    private final CollegeService collegeService;
+
+    @PostMapping("/addCollege")
+    public ResponseEntity<?> addCollege(@RequestBody CollegeDto collegeDto){
+        CollegeDto dto = collegeService.addCollege(collegeDto);
+        return new ResponseEntity<>(dto, HttpStatus.CREATED);
+    }
+}
