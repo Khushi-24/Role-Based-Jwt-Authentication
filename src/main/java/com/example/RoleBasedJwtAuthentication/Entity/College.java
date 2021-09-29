@@ -1,5 +1,6 @@
 package com.example.RoleBasedJwtAuthentication.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,6 +24,11 @@ public class College {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "universityId", referencedColumnName = "universityId")
     private University university;
+
+    @JsonIgnore
+    @OneToOne
+    @JoinColumn(name = "principalId", referencedColumnName = "principalId")
+    private Principal principal;
 
 
 }
