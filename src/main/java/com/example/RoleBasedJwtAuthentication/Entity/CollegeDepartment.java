@@ -22,4 +22,9 @@ public class CollegeDepartment {
     @ManyToOne
     @JoinColumn
     private Department department;
+
+    public CollegeDepartment(College college, Department department) {
+        this.college = college;
+        this.department = department;
+    }
 }
