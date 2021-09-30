@@ -1,13 +1,18 @@
 package com.example.RoleBasedJwtAuthentication.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity(name = "CollegeDepartment")
 @Getter
 @Setter
+@NoArgsConstructor
 public class CollegeDepartment {
 
     @Id
@@ -27,4 +32,8 @@ public class CollegeDepartment {
         this.college = college;
         this.department = department;
     }
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "studentId", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<Student> studentSet = new HashSet<>();
 }

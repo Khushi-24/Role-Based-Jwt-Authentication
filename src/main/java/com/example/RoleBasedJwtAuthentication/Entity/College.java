@@ -32,7 +32,7 @@ public class College {
     private Principal principal;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "college")
+    @OneToMany(mappedBy = "college",cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<CollegeDepartment> collegeDepartmentSet = new HashSet<>();
 
 }
