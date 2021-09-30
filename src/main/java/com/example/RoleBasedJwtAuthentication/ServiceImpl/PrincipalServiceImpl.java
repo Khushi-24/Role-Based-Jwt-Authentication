@@ -3,7 +3,6 @@ package com.example.RoleBasedJwtAuthentication.ServiceImpl;
 import com.example.RoleBasedJwtAuthentication.CustomException.EntityAlreadyExistsException;
 import com.example.RoleBasedJwtAuthentication.CustomException.EntityNotFoundException;
 import com.example.RoleBasedJwtAuthentication.Dto.PrincipalDto;
-import com.example.RoleBasedJwtAuthentication.Entity.College;
 import com.example.RoleBasedJwtAuthentication.Entity.Principal;
 import com.example.RoleBasedJwtAuthentication.Repository.CollegeRepository;
 import com.example.RoleBasedJwtAuthentication.Repository.PrincipalRepository;
@@ -25,13 +24,11 @@ public class PrincipalServiceImpl implements PrincipalService {
     public PrincipalDto addPrincipal(PrincipalDto principalDto) {
         if(!principalRepository.existsById(principalDto.getPrincipalId())){
             if(collegeRepository.existsById(principalDto.getCollege().getCollegeId())){
-                if(principalRepository.existsById(principalDto.getPrincipalId()) && principalRepository.existsByCollegeCollegeId(principalDto.getCollege().getCollegeId())){
+                if(principalRepository.existsByCollegeCollegeId(principalDto.getCollege().getCollegeId())){
                     throw new EntityAlreadyExistsException(HttpStatus.CONFLICT, "One college can have only one Principal.");
                 }else{
                     Principal principal = new Principal();
                     modelMapper.map(principalDto, principal);
-                    College college = collegeRepository.findById(principalDto.getCollege().getCollegeId()).get();
-                    college.setPrincipal(principal);
                     principalRepository.save(principal);
                     return principalDto;
                 }

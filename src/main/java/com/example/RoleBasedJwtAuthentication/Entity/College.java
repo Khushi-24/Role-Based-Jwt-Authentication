@@ -26,8 +26,7 @@ public class College {
     private University university;
 
     @JsonIgnore
-    @OneToOne
-    @JoinColumn(name = "principalId", referencedColumnName = "principalId")
+    @OneToOne(mappedBy = "college")
     private Principal principal;
 
 
