@@ -1,7 +1,7 @@
 package com.example.RoleBasedJwtAuthentication.Controller;
 
-import com.example.RoleBasedJwtAuthentication.Dto.ZoneDto;
-import com.example.RoleBasedJwtAuthentication.Service.ZoneService;
+import com.example.RoleBasedJwtAuthentication.Dto.DepartmentDto;
+import com.example.RoleBasedJwtAuthentication.Service.DepartmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,19 +9,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-
 @RestController
 @RequiredArgsConstructor
-//@Validated
-public class ZoneController {
+public class DepartmentController {
 
-    private final ZoneService zoneService;
+    private final DepartmentService departmentService;
 
-    @PostMapping("/addZone")
-    public ResponseEntity<?> addZone(@Valid @RequestBody ZoneDto zoneDto){
-        ZoneDto dto = zoneService.addZone(zoneDto);
+    @PostMapping("/addDepartment")
+    public ResponseEntity<?> addDepartment(@RequestBody DepartmentDto departmentDto){
+        DepartmentDto dto = departmentService.addDepartment(departmentDto);
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
-
 }

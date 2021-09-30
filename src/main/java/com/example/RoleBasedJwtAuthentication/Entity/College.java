@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -29,5 +31,8 @@ public class College {
     @OneToOne(mappedBy = "college")
     private Principal principal;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "college")
+    private Set<CollegeDepartment> collegeDepartmentSet = new HashSet<>();
 
 }
