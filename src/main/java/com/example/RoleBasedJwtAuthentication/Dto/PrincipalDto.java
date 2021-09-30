@@ -19,7 +19,7 @@ public class PrincipalDto {
     private String principalName;
 
     @NotBlank(message = "College Id can't be null.")
-    private College college;
+    private CollegeDto college;
 
 }
 

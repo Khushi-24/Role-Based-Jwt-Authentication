@@ -22,5 +22,5 @@ public class UniversityDto {
     private String universityCity;
 
     @NotBlank(message = "Please mention zone code for university.")
-    private Zone zone;
+    private ZoneDto zone;
 }

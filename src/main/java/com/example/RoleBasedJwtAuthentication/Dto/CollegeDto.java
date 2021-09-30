@@ -26,5 +26,5 @@ public class CollegeDto {
     @NotBlank(message = "Please Mention university code.")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "universityID", referencedColumnName = "universityId")
-    private University university;
+    private UniversityDto university;
 }
