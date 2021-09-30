@@ -27,6 +27,10 @@ public class Department {
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<CollegeDepartment> collegeDepartmentSet = new HashSet<>();
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<ProfessorDepartment> professorDepartments = new HashSet<>();
+
 
 
 }
