@@ -11,7 +11,7 @@ import javax.persistence.*;
 public class Student {
 
     @Id
-    private Long studentId;
+    private String studentId;
 
     @Column
     private String studentName;
@@ -22,9 +22,14 @@ public class Student {
     @Column
     private Float cpi;
 
+    @Column
+    private String studentPassword;
+
     @ManyToOne
     @JoinColumn(name = "collegeDepartmentId", referencedColumnName = "collegeDepartmentId")
     private CollegeDepartment collegeDepartment;
 
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "roleName", referencedColumnName = "roleName" )
+    private Role role;
 }
