@@ -13,11 +13,13 @@ import java.util.Set;
 public class Professor {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long professorId;
+    private String professorId;
 
     @Column
     private String professorName;
+
+    @Column
+    private String professorPassword;
 
     @OneToMany(mappedBy = "professor", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<ProfessorDepartment> professorDepartments = new HashSet<>();

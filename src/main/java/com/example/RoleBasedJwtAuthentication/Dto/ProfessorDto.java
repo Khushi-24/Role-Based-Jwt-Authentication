@@ -10,9 +10,14 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class ProfessorDto {
 
-
-    private Long professorId;
+    @NotNull(message ="Professor Id can't be null")
+    private String professorId;
 
     @NotNull(message ="Professor name can't be null")
     private String professorName;
+
+    @NotNull(message ="Professor password can't be null")
+    private String professorPassword;
+
+
 }
