@@ -18,6 +18,9 @@ public class Principal {
     @Column
     private String principalName;
 
+    @Column
+    private String principalPassword;
+
     @JsonIgnore
     @OneToOne
     @JoinColumn(name = "collegeId", referencedColumnName = "collegeId")

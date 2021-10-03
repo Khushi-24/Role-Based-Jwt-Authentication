@@ -14,7 +14,6 @@ import java.util.Set;
 public class College {
 
     @Id
-    @Column
     private Long collegeId;
 
     @Column

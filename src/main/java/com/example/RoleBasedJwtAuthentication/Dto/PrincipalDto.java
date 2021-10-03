@@ -18,6 +18,9 @@ public class PrincipalDto {
     @NotBlank(message = "Principal name can't be null.")
     private String principalName;
 
+    @NotBlank(message = "Principal password can't be null.")
+    private String principalPassword;
+
     @NotBlank(message = "College Id can't be null.")
     private CollegeDto college;
 

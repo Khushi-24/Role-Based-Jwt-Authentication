@@ -4,12 +4,15 @@ import com.example.RoleBasedJwtAuthentication.CustomException.EntityAlreadyExist
 import com.example.RoleBasedJwtAuthentication.CustomException.EntityNotFoundException;
 import com.example.RoleBasedJwtAuthentication.Dto.PrincipalDto;
 import com.example.RoleBasedJwtAuthentication.Entity.Principal;
+import com.example.RoleBasedJwtAuthentication.Entity.User;
 import com.example.RoleBasedJwtAuthentication.Repository.CollegeRepository;
 import com.example.RoleBasedJwtAuthentication.Repository.PrincipalRepository;
+import com.example.RoleBasedJwtAuthentication.Repository.UserRepository;
 import com.example.RoleBasedJwtAuthentication.Service.PrincipalService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,8 +20,10 @@ import org.springframework.stereotype.Service;
 public class PrincipalServiceImpl implements PrincipalService {
 
     private final PrincipalRepository principalRepository;
+    private final UserRepository userRepository;
     private final CollegeRepository collegeRepository;
     private final ModelMapper modelMapper = new ModelMapper();
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public PrincipalDto addPrincipal(PrincipalDto principalDto) {
@@ -28,8 +33,14 @@ public class PrincipalServiceImpl implements PrincipalService {
                     throw new EntityAlreadyExistsException(HttpStatus.CONFLICT, "One college can have only one Principal.");
                 }else{
                     Principal principal = new Principal();
+                    User user = new User();
                     modelMapper.map(principalDto, principal);
+                    principal.setPrincipalPassword(getEncodedPassword(principalDto.getPrincipalPassword()));
                     principalRepository.save(principal);
+                    user.setUserName(principal.getPrincipalName());
+                    user.setUserPassword(principal.getPrincipalPassword());
+                    user.setUserRole("Principal");
+                    userRepository.save(user);
                     return principalDto;
                 }
 
@@ -40,5 +51,9 @@ public class PrincipalServiceImpl implements PrincipalService {
             throw new EntityAlreadyExistsException(HttpStatus.CONFLICT, "Principal Already Exists.");
         }
 
+    }
+
+    public String getEncodedPassword(String password) {
+        return passwordEncoder.encode(password);
     }
 }
