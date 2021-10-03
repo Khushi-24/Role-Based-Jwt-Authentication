@@ -3,7 +3,8 @@ package com.example.RoleBasedJwtAuthentication.ServiceImpl;
 import com.example.RoleBasedJwtAuthentication.Dto.JwtRequest;
 import com.example.RoleBasedJwtAuthentication.Dto.JwtResponse;
 import com.example.RoleBasedJwtAuthentication.Entity.Student;
-import com.example.RoleBasedJwtAuthentication.Repository.StudentRepository;
+import com.example.RoleBasedJwtAuthentication.Entity.User;
+import com.example.RoleBasedJwtAuthentication.Repository.UserRepository;
 import com.example.RoleBasedJwtAuthentication.Util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,7 +25,7 @@ import java.util.Set;
 public class JwtServiceImpl implements UserDetailsService {
 
     @Autowired
-    private StudentRepository studentRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -33,38 +34,38 @@ public class JwtServiceImpl implements UserDetailsService {
     private  AuthenticationManager authenticationManager;
 
     public JwtResponse createJwtToken(JwtRequest jwtRequest) throws Exception {
-        String studentId = jwtRequest.getStudentID();
-        String studentPassword = jwtRequest.getStudentPassword();
-        authenticate(studentId, studentPassword);
+        String userId = jwtRequest.getUserName();
+        String userPassword = jwtRequest.getUserPassword();
+        authenticate(userId, userPassword);
 
-        UserDetails userDetails = loadUserByUsername(studentId);
+        UserDetails userDetails = loadUserByUsername(userId);
         String newGeneratedToken = jwtUtil.generateToken(userDetails);
 
-       Student student = studentRepository.findById(studentId).get();
-        return new JwtResponse(student, newGeneratedToken);
+       User user = userRepository.findById(userId).get();
+        return new JwtResponse(user, newGeneratedToken);
     }
 
     @Override
-    public UserDetails loadUserByUsername(String studentId) throws UsernameNotFoundException {
-        Student student = studentRepository.findById(studentId).get();
+    public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
+        User user = userRepository.findById(userId).get();
 
-        if (student != null) {
+        if (user != null) {
             return new org.springframework.security.core.userdetails.User(
-                    student.getStudentId(),
-                    student.getStudentPassword(),
-                    getAuthority(student)
+                    user.getUserName(),
+                    user.getUserPassword(),
+                    getAuthority(user)
             );
         } else {
-            throw new UsernameNotFoundException("User not found with studentId: " + studentId);
+            throw new UsernameNotFoundException("User not found with studentId: " + userId);
         }
     }
 
-    private Set getAuthority(Student student) {
+    private Set getAuthority(User user) {
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
 //        user.forEach(role -> {
 //            authorities.add(new SimpleGrantedAuthority("ROLE_" + "User"));
 //        });
-        authorities.add(new SimpleGrantedAuthority("ROLE_" + "User"));
+        authorities.add(new SimpleGrantedAuthority("ROLE " + user.getUserRole()));
         return authorities;
     }
 

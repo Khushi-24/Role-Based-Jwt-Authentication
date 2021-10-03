@@ -1,6 +1,7 @@
 package com.example.RoleBasedJwtAuthentication.Dto;
 
 import com.example.RoleBasedJwtAuthentication.Entity.Student;
+import com.example.RoleBasedJwtAuthentication.Entity.User;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,11 +9,11 @@ import lombok.Setter;
 @Setter
 public class JwtResponse {
 
-    private Student student;
+    private User user;
     private String jwtToken;
 
-    public JwtResponse(Student student, String jwtToken) {
-        this.student = student;
+    public JwtResponse(User user, String jwtToken) {
+        this.user = user;
         this.jwtToken = jwtToken;
     }
 }
