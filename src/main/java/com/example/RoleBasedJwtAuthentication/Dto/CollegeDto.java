@@ -25,4 +25,10 @@ public class CollegeDto {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "universityID", referencedColumnName = "universityId")
     private UniversityDto university;
+
+    private Long countOfStudent;
+
+    private Long countOfPrincipal;
+
+    private Long countOfDepartment;
 }

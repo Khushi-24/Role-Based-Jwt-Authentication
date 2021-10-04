@@ -30,7 +30,4 @@ public class StudentDto {
     @NotNull(message = "Department Id can't be null.")
     private CollegeDepartmentDto collegeDepartmentDto;
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-//    @NotNull(message = "Enter role type.")
-    private RoleDto roleDto;
 }

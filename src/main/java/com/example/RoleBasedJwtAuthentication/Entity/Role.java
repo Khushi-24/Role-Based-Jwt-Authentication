@@ -19,7 +19,4 @@ public class Role {
     @Column
     private String roleDescription;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "studentName", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private Set<Student> studentSet = new HashSet<>();
 }

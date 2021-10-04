@@ -29,7 +29,4 @@ public class Student {
     @JoinColumn(name = "collegeDepartmentId", referencedColumnName = "collegeDepartmentId")
     private CollegeDepartment collegeDepartment;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "roleName", referencedColumnName = "roleName" )
-    private Role role;
 }

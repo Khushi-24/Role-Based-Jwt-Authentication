@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PrincipalRepository extends JpaRepository<Principal, String> {
     boolean existsByCollegeCollegeId(Long collegeId);
+
+    Long countByCollegeCollegeId(Long collegeId);
 }

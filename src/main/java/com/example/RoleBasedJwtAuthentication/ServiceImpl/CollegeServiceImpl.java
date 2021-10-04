@@ -8,10 +8,7 @@ import com.example.RoleBasedJwtAuthentication.Dto.CollegeDto;
 import com.example.RoleBasedJwtAuthentication.Entity.College;
 import com.example.RoleBasedJwtAuthentication.Entity.CollegeDepartment;
 import com.example.RoleBasedJwtAuthentication.Entity.Department;
-import com.example.RoleBasedJwtAuthentication.Repository.CollegeDepartmentRepository;
-import com.example.RoleBasedJwtAuthentication.Repository.CollegeRepository;
-import com.example.RoleBasedJwtAuthentication.Repository.DepartmentRepository;
-import com.example.RoleBasedJwtAuthentication.Repository.UniversityRepository;
+import com.example.RoleBasedJwtAuthentication.Repository.*;
 import com.example.RoleBasedJwtAuthentication.Service.CollegeService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -24,7 +21,11 @@ public class CollegeServiceImpl implements CollegeService {
 
     private final CollegeRepository collegeRepository;
 
+    private final PrincipalRepository principalRepository;
+
     private final DepartmentRepository departmentRepository;
+
+    private final StudentRepository studentRepository;
 
     private final CollegeDepartmentRepository collegeDepartmentRepository;
 
@@ -65,6 +66,18 @@ public class CollegeServiceImpl implements CollegeService {
         }
 
 
+    }
+
+    @Override
+    public CollegeDto getCollegeById(Long collegeId) {
+
+        College college = collegeRepository.findById(collegeId).orElseThrow(() -> new javax.persistence.EntityNotFoundException("College does not exist."));
+        CollegeDto collegeDto = new CollegeDto();
+        modelMapper.map(college, collegeDto);
+        collegeDto.setCountOfStudent(studentRepository.countByCollegeDepartmentCollegeCollegeId(collegeId));
+        collegeDto.setCountOfPrincipal(principalRepository.countByCollegeCollegeId(collegeId));
+        collegeDto.setCountOfDepartment(departmentRepository.countByCollegeDepartmentSetCollegeCollegeId(collegeId));
+        return collegeDto;
     }
 
 }

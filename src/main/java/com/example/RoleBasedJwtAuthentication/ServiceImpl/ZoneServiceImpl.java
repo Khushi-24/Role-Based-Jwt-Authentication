@@ -1,8 +1,7 @@
 package com.example.RoleBasedJwtAuthentication.ServiceImpl;
 
 import com.example.RoleBasedJwtAuthentication.CustomException.BadRequestException;
-import com.example.RoleBasedJwtAuthentication.CustomException.EntityNotFoundException;
-import com.example.RoleBasedJwtAuthentication.Dto.UniversityDto;
+import com.example.RoleBasedJwtAuthentication.Dto.ZoneDto;
 import com.example.RoleBasedJwtAuthentication.Entity.Zone;
 import com.example.RoleBasedJwtAuthentication.Repository.UniversityRepository;
 import com.example.RoleBasedJwtAuthentication.Repository.ZoneRepository;
@@ -25,7 +24,7 @@ public class ZoneServiceImpl implements ZoneService {
     private final ModelMapper modelMapper = new ModelMapper();
 
     @Override
-    public com.example.RoleBasedJwtAuthentication.Dto.ZoneDto addZone(com.example.RoleBasedJwtAuthentication.Dto.ZoneDto zoneDto) {
+    public ZoneDto addZone(ZoneDto zoneDto) {
 
         if(!zoneRepository.existsById(zoneDto.getZoneId())){
             if(!zoneRepository.existsByZoneName(zoneDto.getZoneName())){
@@ -48,15 +47,11 @@ public class ZoneServiceImpl implements ZoneService {
 
     @Override
     public com.example.RoleBasedJwtAuthentication.Dto.ZoneDto getZoneById(String zoneId) {
-        if(zoneRepository.existsById(zoneId)) {
             Zone zone = zoneRepository.findById(zoneId).orElseThrow(() -> new javax.persistence.EntityNotFoundException("Zone does not exist."));
-            com.example.RoleBasedJwtAuthentication.Dto.ZoneDto zoneDto = new com.example.RoleBasedJwtAuthentication.Dto.ZoneDto();
+            ZoneDto zoneDto = new ZoneDto();
             modelMapper.map(zone, zoneDto);
             zoneDto.setCountOfUniversities(universityRepository.countByZoneZoneId(zoneId));
             return zoneDto;
-        }else{
-            throw new EntityNotFoundException(HttpStatus.NOT_FOUND, "No such zone exists.");
-        }
     }
 
     @Override
