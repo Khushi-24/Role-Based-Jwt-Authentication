@@ -1,15 +1,18 @@
 package com.example.RoleBasedJwtAuthentication.ServiceImpl;
 
-import com.example.RoleBasedJwtAuthentication.CustomException.BadRequestException;
 import com.example.RoleBasedJwtAuthentication.CustomException.EntityAlreadyExistsException;
 import com.example.RoleBasedJwtAuthentication.CustomException.EntityNotFoundException;
 import com.example.RoleBasedJwtAuthentication.Dto.UniversityDto;
 import com.example.RoleBasedJwtAuthentication.Entity.University;
+import com.example.RoleBasedJwtAuthentication.Repository.CollegeRepository;
 import com.example.RoleBasedJwtAuthentication.Repository.UniversityRepository;
 import com.example.RoleBasedJwtAuthentication.Repository.ZoneRepository;
 import com.example.RoleBasedJwtAuthentication.Service.UniversityService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +21,8 @@ import org.springframework.stereotype.Service;
 public class UniversityServiceImpl implements UniversityService {
 
     private final UniversityRepository universityRepository;
+
+    private final CollegeRepository collegeRepository;
 
     private final ZoneRepository zoneRepository;
 
@@ -38,5 +43,27 @@ public class UniversityServiceImpl implements UniversityService {
             throw new EntityAlreadyExistsException(HttpStatus.CONFLICT, "University already exists.");
         }
 
+    }
+
+    @Override
+    public UniversityDto getUniversityById(String universityId) {
+
+        if(universityRepository.existsById(universityId)) {
+            University university = universityRepository.findById(universityId).orElseThrow(() -> new javax.persistence.EntityNotFoundException("University does not exist."));
+            UniversityDto universityDto = new UniversityDto();
+            modelMapper.map(university, universityDto);
+            universityDto.setCountOfColleges(collegeRepository.countByUniversityUniversityId(universityId));
+            return universityDto;
+
+        }else{
+            throw new EntityNotFoundException(HttpStatus.NOT_FOUND, "No such university exists");
+        }
+    }
+
+    @Override
+    public Page<University> findPaginated(int pageNo) {
+        int pageSize = 5;
+        Pageable pageable = PageRequest.of(pageNo -1, pageSize);
+        return this.universityRepository.findAll(pageable);
     }
 }

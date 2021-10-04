@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CollegeRepository extends JpaRepository<College ,Long> {
 
+    Long countByUniversityUniversityId(String universityId);
+
 }

@@ -37,7 +37,7 @@ public class PrincipalServiceImpl implements PrincipalService {
                     modelMapper.map(principalDto, principal);
                     principal.setPrincipalPassword(getEncodedPassword(principalDto.getPrincipalPassword()));
                     principalRepository.save(principal);
-                    user.setUserName(principal.getPrincipalName());
+                    user.setUserName(principal.getPrincipalId());
                     user.setUserPassword(principal.getPrincipalPassword());
                     user.setUserRole("Principal");
                     userRepository.save(user);

@@ -1,6 +1,6 @@
 package com.example.RoleBasedJwtAuthentication.Dto;
 
-import com.example.RoleBasedJwtAuthentication.Entity.Zone;
+import com.example.RoleBasedJwtAuthentication.Dto.ZoneDto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,4 +23,6 @@ public class UniversityDto {
 
     @NotBlank(message = "Please mention zone code for university.")
     private ZoneDto zone;
+
+    private Long countOfColleges ;
 }

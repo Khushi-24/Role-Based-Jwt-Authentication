@@ -1,13 +1,18 @@
 package com.example.RoleBasedJwtAuthentication.Controller;
 
+import com.example.RoleBasedJwtAuthentication.CustomException.EntityNotFoundException;
 import com.example.RoleBasedJwtAuthentication.Dto.ZoneDto;
+import com.example.RoleBasedJwtAuthentication.Dto.UniversityDto;
+import com.example.RoleBasedJwtAuthentication.Entity.Zone;
 import com.example.RoleBasedJwtAuthentication.Service.ZoneService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,4 +33,13 @@ public class ZoneController {
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
+    @GetMapping("/getAllZones/{pageNo}")
+    public ResponseEntity<?> findPaginated(@PathVariable(value = "pageNo") int pageNo){
+        Page<Zone> page = zoneService.findPaginated(pageNo);
+        List<Zone> zoneList = page.getContent();
+        if(pageNo > page.getTotalPages()){
+            throw new EntityNotFoundException(HttpStatus.NOT_FOUND, "No further pages available.");
+        }
+        return new ResponseEntity<>(zoneList, HttpStatus.OK);
+    }
 }

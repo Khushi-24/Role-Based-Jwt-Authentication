@@ -1,10 +1,8 @@
 package com.example.RoleBasedJwtAuthentication.Dto;
 
-import com.example.RoleBasedJwtAuthentication.Entity.University;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;

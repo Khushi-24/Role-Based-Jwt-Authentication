@@ -1,19 +1,19 @@
 package com.example.RoleBasedJwtAuthentication.ServiceImpl;
 
 import com.example.RoleBasedJwtAuthentication.CustomException.BadRequestException;
-import com.example.RoleBasedJwtAuthentication.Dto.ZoneDto;
-import com.example.RoleBasedJwtAuthentication.Entity.University;
+import com.example.RoleBasedJwtAuthentication.CustomException.EntityNotFoundException;
+import com.example.RoleBasedJwtAuthentication.Dto.UniversityDto;
 import com.example.RoleBasedJwtAuthentication.Entity.Zone;
 import com.example.RoleBasedJwtAuthentication.Repository.UniversityRepository;
 import com.example.RoleBasedJwtAuthentication.Repository.ZoneRepository;
 import com.example.RoleBasedJwtAuthentication.Service.ZoneService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +25,7 @@ public class ZoneServiceImpl implements ZoneService {
     private final ModelMapper modelMapper = new ModelMapper();
 
     @Override
-    public ZoneDto addZone(ZoneDto zoneDto) {
+    public com.example.RoleBasedJwtAuthentication.Dto.ZoneDto addZone(com.example.RoleBasedJwtAuthentication.Dto.ZoneDto zoneDto) {
 
         if(!zoneRepository.existsById(zoneDto.getZoneId())){
             if(!zoneRepository.existsByZoneName(zoneDto.getZoneName())){
@@ -47,13 +47,22 @@ public class ZoneServiceImpl implements ZoneService {
     }
 
     @Override
-    public ZoneDto getZoneById(String zoneId) {
-        List<University> list = universityRepository.findAll();
+    public com.example.RoleBasedJwtAuthentication.Dto.ZoneDto getZoneById(String zoneId) {
+        if(zoneRepository.existsById(zoneId)) {
             Zone zone = zoneRepository.findById(zoneId).orElseThrow(() -> new javax.persistence.EntityNotFoundException("Zone does not exist."));
-            ZoneDto zoneDto = new ZoneDto();
+            com.example.RoleBasedJwtAuthentication.Dto.ZoneDto zoneDto = new com.example.RoleBasedJwtAuthentication.Dto.ZoneDto();
             modelMapper.map(zone, zoneDto);
-            zoneDto.setCountOfCollege(universityRepository.countByZoneZoneId(zoneId));
+            zoneDto.setCountOfUniversities(universityRepository.countByZoneZoneId(zoneId));
             return zoneDto;
+        }else{
+            throw new EntityNotFoundException(HttpStatus.NOT_FOUND, "No such zone exists.");
+        }
+    }
 
+    @Override
+    public Page<Zone> findPaginated(int pageNo) {
+        int pageSize = 5;
+        Pageable pageable = PageRequest.of(pageNo -1, pageSize);
+        return this.zoneRepository.findAll(pageable);
     }
 }
