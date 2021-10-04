@@ -1,5 +1,7 @@
 package com.example.RoleBasedJwtAuthentication.Controller;
 
+import com.example.RoleBasedJwtAuthentication.Dto.CollegeDepartmentDto;
+import com.example.RoleBasedJwtAuthentication.Dto.ProfessorDepartmentDto;
 import com.example.RoleBasedJwtAuthentication.Dto.ProfessorDto;
 import com.example.RoleBasedJwtAuthentication.Service.ProfessorService;
 import lombok.RequiredArgsConstructor;
@@ -19,5 +21,11 @@ public class ProfessorController {
     public ResponseEntity<?> addProfessor(@RequestBody ProfessorDto professorDto){
         ProfessorDto dto = professorService.addProfessor(professorDto);
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/addProfessorToDepartment")
+    public ResponseEntity<?> addProfessorToDepartment(@RequestBody ProfessorDepartmentDto professorDepartmentDto){
+        professorService.addProfessorToDepartment(professorDepartmentDto);
+        return ResponseEntity.ok("Professor Added to department successfully.");
     }
 }

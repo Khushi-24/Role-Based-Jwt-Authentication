@@ -21,5 +21,10 @@ public class ProfessorDepartment {
     @ManyToOne
     @JoinColumn(name = "departmentId", referencedColumnName = "departmentId")
     private Department department;
+
+    public ProfessorDepartment(Professor professor, Department department) {
+        this.professor =professor;
+        this.department =department;
+    }
 }
 
