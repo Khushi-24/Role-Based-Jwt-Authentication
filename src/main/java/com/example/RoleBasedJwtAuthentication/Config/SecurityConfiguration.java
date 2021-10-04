@@ -22,7 +22,7 @@ public class SecurityConfiguration {
                         .allowedHeaders("*")
                         .allowedOriginPatterns("*")
                         .allowCredentials(true)
-                        ;
+                ;
             }
         };
     }

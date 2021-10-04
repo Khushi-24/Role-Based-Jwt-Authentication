@@ -25,29 +25,29 @@ import java.util.Set;
 public class JwtServiceImpl implements UserDetailsService {
 
     @Autowired
-    private UserRepository userRepository;
+    private  UserRepository userRepository;
 
     @Autowired
-    private JwtUtil jwtUtil;
+    private  JwtUtil jwtUtil;
 
     @Autowired
     private  AuthenticationManager authenticationManager;
 
     public JwtResponse createJwtToken(JwtRequest jwtRequest) throws Exception {
-        String userId = jwtRequest.getUserName();
+        String userName = jwtRequest.getUserName();
         String userPassword = jwtRequest.getUserPassword();
-        authenticate(userId, userPassword);
+        authenticate(userName, userPassword);
 
-        UserDetails userDetails = loadUserByUsername(userId);
+        UserDetails userDetails = loadUserByUsername(userName);
         String newGeneratedToken = jwtUtil.generateToken(userDetails);
 
-       User user = userRepository.findById(userId).get();
+        User user = userRepository.findById(userName).get();
         return new JwtResponse(user, newGeneratedToken);
     }
 
     @Override
-    public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-        User user = userRepository.findById(userId).get();
+    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+        User user = userRepository.findById(userName).get();
 
         if (user != null) {
             return new org.springframework.security.core.userdetails.User(
@@ -56,7 +56,7 @@ public class JwtServiceImpl implements UserDetailsService {
                     getAuthority(user)
             );
         } else {
-            throw new UsernameNotFoundException("User not found with studentId: " + userId);
+            throw new UsernameNotFoundException("User not found with username: " + userName);
         }
     }
 
@@ -65,7 +65,7 @@ public class JwtServiceImpl implements UserDetailsService {
 //        user.forEach(role -> {
 //            authorities.add(new SimpleGrantedAuthority("ROLE_" + "User"));
 //        });
-        authorities.add(new SimpleGrantedAuthority("ROLE " + user.getUserRole()));
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + "User"));
         return authorities;
     }
 
