@@ -25,4 +25,6 @@ public class ZoneDto {
 
     @NotBlank(message = "Zone state can't be null.")
     private String state;
+
+    private Long countOfCollege;
 }

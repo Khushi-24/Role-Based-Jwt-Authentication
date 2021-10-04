@@ -17,6 +17,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 
 @Configuration
 @EnableWebSecurity
@@ -28,31 +31,38 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     private  JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @Autowired
-    private  JwtRequestFilter jwtRequestFilter;
-
-    @Autowired
     private  UserDetailsService jwtService;
 
-    @Bean
     @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception{
+    @Bean
+    public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
 
-    @Override
-    protected void configure(HttpSecurity httpSecurity) throws Exception{
-        httpSecurity.cors();
-        httpSecurity.csrf().disable()
-                .authorizeRequests().antMatchers("/authenticate", "/addUser").permitAll()
-                .antMatchers(HttpHeaders.ALLOW).permitAll()
-//                .anyRequest().authenticated()
-                .and()
-                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                ;
+    private String[] get8081Filters() {
+        ArrayList<String> list = new ArrayList<>();
+        //list.add("/api/**");
+        list.add("/**");
+        return list.toArray(new String[list.size()]);
+    }
 
-        httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+    @Bean
+    public JwtRequestFilter jwtRequestFilter() {
+        return new JwtRequestFilter();
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception{
+        http.cors().and().csrf().disable().
+                authorizeRequests()
+                //.antMatchers(Arrays.asList(environment.getProperty("spring.datasource.url").split("/"))
+                // .contains(/*Mention Live Database Here*/"kiwe_live")?getOtherFilters():get8081Filters()).permitAll()
+                .antMatchers(get8081Filters()).permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.addFilterBefore(jwtRequestFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean

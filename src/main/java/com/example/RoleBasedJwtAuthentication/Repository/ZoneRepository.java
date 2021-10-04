@@ -9,4 +9,5 @@ public interface ZoneRepository extends JpaRepository<Zone,String> {
     boolean existsByZoneName(String zoneName);
 
     boolean existsByZoneFullName(String zoneFullName);
+
 }

@@ -4,4 +4,6 @@ import com.example.RoleBasedJwtAuthentication.Dto.ZoneDto;
 
 public interface ZoneService {
     ZoneDto addZone(ZoneDto zoneDto);
+
+    ZoneDto getZoneById(String zoneId);
 }
