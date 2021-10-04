@@ -76,7 +76,7 @@ public class CollegeServiceImpl implements CollegeService {
         modelMapper.map(college, collegeDto);
         collegeDto.setCountOfStudent(studentRepository.countByCollegeDepartmentCollegeCollegeId(collegeId));
         collegeDto.setCountOfPrincipal(principalRepository.countByCollegeCollegeId(collegeId));
-        collegeDto.setCountOfDepartment(departmentRepository.countByCollegeDepartmentSetCollegeCollegeId(collegeId));
+        collegeDto.setCountOfDepartment(null);
         return collegeDto;
     }
 
