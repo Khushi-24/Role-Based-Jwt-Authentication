@@ -16,4 +16,7 @@ public class CollegeDepartmentDto {
 
     @NotBlank(message = "Department Id can't be null.")
     private Long departmentId;
+
+    private DepartmentDto department;
+    private CollegeDto college;
 }

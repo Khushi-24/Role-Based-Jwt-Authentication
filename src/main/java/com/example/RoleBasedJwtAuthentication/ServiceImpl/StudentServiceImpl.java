@@ -2,13 +2,17 @@ package com.example.RoleBasedJwtAuthentication.ServiceImpl;
 
 import com.example.RoleBasedJwtAuthentication.CustomException.EntityAlreadyExistsException;
 import com.example.RoleBasedJwtAuthentication.CustomException.EntityNotFoundException;
-import com.example.RoleBasedJwtAuthentication.Dto.RoleDto;
-import com.example.RoleBasedJwtAuthentication.Dto.StudentDto;
+import com.example.RoleBasedJwtAuthentication.Dto.*;
 import com.example.RoleBasedJwtAuthentication.Entity.*;
+import com.example.RoleBasedJwtAuthentication.HelperClass;
 import com.example.RoleBasedJwtAuthentication.Repository.*;
 import com.example.RoleBasedJwtAuthentication.Service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,8 +37,8 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public StudentDto addStudent(StudentDto studentDto) {
         if(!studentRepository.existsById(studentDto.getStudentId())){
-            College college = collegeRepository.findById(studentDto.getCollegeDepartmentDto().getCollegeId().longValue()).orElseThrow(()-> new EntityNotFoundException(HttpStatus.NOT_FOUND, "College doesn't exists. "));
-            Department department = departmentRepository.findById(studentDto.getCollegeDepartmentDto().getDepartmentId()).orElseThrow(()-> new EntityNotFoundException(HttpStatus.NOT_FOUND, "Department doesn't exists. "));
+            College college = collegeRepository.findById(studentDto.getCollegeDepartment().getCollegeId().longValue()).orElseThrow(()-> new EntityNotFoundException(HttpStatus.NOT_FOUND, "College doesn't exists. "));
+            Department department = departmentRepository.findById(studentDto.getCollegeDepartment().getDepartmentId()).orElseThrow(()-> new EntityNotFoundException(HttpStatus.NOT_FOUND, "Department doesn't exists. "));
             if(collegeDepartmentRepository.existsByCollegeAndDepartment(college, department)){
                 CollegeDepartment collegeDepartment = collegeDepartmentRepository.findByCollegeIdAndDepartmentId(college.getCollegeId(), department.getDepartmentId());
                 Student student = new Student();
@@ -66,6 +70,47 @@ public class StudentServiceImpl implements StudentService {
         }
 
     }
+
+    @Override
+    public StudentDto getStudentByStudentId(String studentId) {
+
+        HelperClass helperClass = new HelperClass();
+        Student student = studentRepository.findById(studentId).orElseThrow(() -> new javax.persistence.EntityNotFoundException("Student does not exist."));
+        System.out.println(student.getCollegeDepartment());
+        StudentDto studentDto = new StudentDto();
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+        modelMapper.map(student, studentDto);
+        studentDto = helperClass.nullStudentSemesterAndCpiAndPassword(studentDto);
+        CollegeDepartmentDto dto = studentDto.getCollegeDepartment();
+        dto.setDepartmentId(null);
+        DepartmentDto departmentDto = helperClass.nullDepartmentDuration(dto.getDepartment());
+        dto.setDepartment(departmentDto);
+        CollegeDto collegeDto = helperClass.nullCollegeCity(dto.getCollege());
+        UniversityDto universityDto = helperClass.nullUniversityCity(collegeDto.getUniversity());
+        universityDto.setZone(null);
+        collegeDto.setUniversity(universityDto);
+        collegeDto.setUniversityName(null);
+        dto.setCollege(collegeDto);
+        return studentDto;
+    }
+
+    @Override
+    public Page<StudentDto> getAllStudents(int pageNo) {
+        int pageSize = 5;
+        Pageable pageable = PageRequest.of(pageNo -1, pageSize);
+        Page<Student> students = studentRepository.findAll(pageable);
+        List<StudentDto> studentDtoList = students.stream().map((Student student) ->
+                new StudentDto(
+                        student.getStudentId(),
+                        student.getStudentName(),
+                        student.getCollegeDepartment().getCollege().getCollegeName(),
+                        student.getCollegeDepartment().getDepartment().getDepartmentName(),
+                        student.getCollegeDepartment().getCollege().getUniversity().getUniversityName(),
+                        student.getCollegeDepartment().getCollege().getUniversity().getZone().getZoneFullName()
+                        )).collect(Collectors.toList());
+        return new PageImpl<>(studentDtoList,  pageable, studentDtoList.size());
+    }
+
     public String getEncodedPassword(String password) {
         return passwordEncoder.encode(password);
     }
