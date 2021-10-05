@@ -87,6 +87,7 @@ public class CollegeServiceImpl implements CollegeService {
         collegeDto.setCountOfStudent(studentRepository.countByCollegeDepartmentCollegeCollegeId(collegeId));
         collegeDto.setCountOfPrincipal(principalRepository.countByCollegeCollegeId(collegeId));
         collegeDto.setCountOfDepartment(departmentRepository.countByCollegeDepartmentSetCollegeCollegeId(collegeId));
+        collegeDto.setCountOfProfessors(collegeDepartmentRepository.countByCollegeCollegeId(collegeId));
         collegeDto.setCollegeCity(null);
         UniversityDto universityDto = collegeDto.getUniversity();
         universityDto.setUniversityId(null);
@@ -103,7 +104,7 @@ public class CollegeServiceImpl implements CollegeService {
     }
 
     @Override
-    public Page<CollegeDto> getAllCourse(int pageNo) {
+    public Page<CollegeDto> getAllColleges(int pageNo) {
         int pageSize = 5;
         Pageable pageable = PageRequest.of(pageNo -1, pageSize);
         Page<College> colleges = collegeRepository.findAll(pageable);

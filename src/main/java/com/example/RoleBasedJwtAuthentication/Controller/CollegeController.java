@@ -3,7 +3,6 @@ package com.example.RoleBasedJwtAuthentication.Controller;
 import com.example.RoleBasedJwtAuthentication.CustomException.EntityNotFoundException;
 import com.example.RoleBasedJwtAuthentication.Dto.CollegeDepartmentDto;
 import com.example.RoleBasedJwtAuthentication.Dto.CollegeDto;
-import com.example.RoleBasedJwtAuthentication.Dto.UniversityDto;
 import com.example.RoleBasedJwtAuthentication.Service.CollegeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -38,9 +37,9 @@ public class CollegeController {
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
-    @GetMapping("/getAllCourse/{pageNo}")
-    public ResponseEntity<?> getAllCourse(@PathVariable(value = "pageNo") int pageNo){
-        Page<CollegeDto> page = collegeService.getAllCourse(pageNo);
+    @GetMapping("/getAllColleges/{pageNo}")
+    public ResponseEntity<?> getAllColleges(@PathVariable(value = "pageNo") int pageNo){
+        Page<CollegeDto> page = collegeService.getAllColleges(pageNo);
         List<CollegeDto> collegeDtoList = page.getContent();
         if(pageNo > page.getTotalPages()){
             throw new EntityNotFoundException(HttpStatus.NOT_FOUND, "No further pages available.");

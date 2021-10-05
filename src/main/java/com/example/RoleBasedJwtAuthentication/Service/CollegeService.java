@@ -11,5 +11,5 @@ public interface CollegeService {
 
     CollegeDto getCollegeById(Long collegeId);
 
-    Page<CollegeDto> getAllCourse(int pageNo);
+    Page<CollegeDto> getAllColleges(int pageNo);
 }
