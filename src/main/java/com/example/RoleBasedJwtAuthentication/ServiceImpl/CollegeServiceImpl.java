@@ -5,15 +5,25 @@ import com.example.RoleBasedJwtAuthentication.CustomException.EntityAlreadyExist
 import com.example.RoleBasedJwtAuthentication.CustomException.EntityNotFoundException;
 import com.example.RoleBasedJwtAuthentication.Dto.CollegeDepartmentDto;
 import com.example.RoleBasedJwtAuthentication.Dto.CollegeDto;
+import com.example.RoleBasedJwtAuthentication.Dto.UniversityDto;
+import com.example.RoleBasedJwtAuthentication.Dto.ZoneDto;
 import com.example.RoleBasedJwtAuthentication.Entity.College;
 import com.example.RoleBasedJwtAuthentication.Entity.CollegeDepartment;
 import com.example.RoleBasedJwtAuthentication.Entity.Department;
+import com.example.RoleBasedJwtAuthentication.Entity.University;
 import com.example.RoleBasedJwtAuthentication.Repository.*;
 import com.example.RoleBasedJwtAuthentication.Service.CollegeService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -76,8 +86,35 @@ public class CollegeServiceImpl implements CollegeService {
         modelMapper.map(college, collegeDto);
         collegeDto.setCountOfStudent(studentRepository.countByCollegeDepartmentCollegeCollegeId(collegeId));
         collegeDto.setCountOfPrincipal(principalRepository.countByCollegeCollegeId(collegeId));
-        collegeDto.setCountOfDepartment(null);
+        collegeDto.setCountOfDepartment(departmentRepository.countByCollegeDepartmentSetCollegeCollegeId(collegeId));
+        collegeDto.setCollegeCity(null);
+        UniversityDto universityDto = collegeDto.getUniversity();
+        universityDto.setUniversityId(null);
+        universityDto.setUniversityCity(null);
+        ZoneDto zoneDto = collegeDto.getUniversity().getZone();
+        zoneDto.setZoneId(null);
+        zoneDto.setZoneName(null);
+        zoneDto.setState(null);
+        universityDto.setZone(zoneDto);
+        universityDto.setZoneFullName(null);
+        collegeDto.setUniversity(universityDto);
+        collegeDto.setUniversityName(null);
         return collegeDto;
+    }
+
+    @Override
+    public Page<CollegeDto> getAllCourse(int pageNo) {
+        int pageSize = 5;
+        Pageable pageable = PageRequest.of(pageNo -1, pageSize);
+        Page<College> colleges = collegeRepository.findAll(pageable);
+        List<CollegeDto> collegeDtoList = colleges.stream().map((College college) ->
+                new CollegeDto(
+                        college.getCollegeId(),
+                        college.getCollegeName(),
+                        college.getUniversity().getUniversityName(),
+                        college.getUniversity().getZone().getZoneFullName())).collect(Collectors.toList());
+        return new PageImpl<CollegeDto>(collegeDtoList,  pageable, collegeDtoList.size());
+
     }
 
 }

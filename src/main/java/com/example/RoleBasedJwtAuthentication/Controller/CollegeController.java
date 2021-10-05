@@ -1,15 +1,17 @@
 package com.example.RoleBasedJwtAuthentication.Controller;
 
+import com.example.RoleBasedJwtAuthentication.CustomException.EntityNotFoundException;
 import com.example.RoleBasedJwtAuthentication.Dto.CollegeDepartmentDto;
 import com.example.RoleBasedJwtAuthentication.Dto.CollegeDto;
+import com.example.RoleBasedJwtAuthentication.Dto.UniversityDto;
 import com.example.RoleBasedJwtAuthentication.Service.CollegeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,9 +32,19 @@ public class CollegeController {
         return ResponseEntity.ok("Department Added to college successfully.");
     }
 
-    @PostMapping("/getCollegeById/{collegeId}")
+    @GetMapping("/getCollegeById/{collegeId}")
     public ResponseEntity<?> getCollegeById(@PathVariable Long collegeId){
         CollegeDto dto = collegeService.getCollegeById(collegeId);
         return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
+
+    @GetMapping("/getAllCourse/{pageNo}")
+    public ResponseEntity<?> getAllCourse(@PathVariable(value = "pageNo") int pageNo){
+        Page<CollegeDto> page = collegeService.getAllCourse(pageNo);
+        List<CollegeDto> collegeDtoList = page.getContent();
+        if(pageNo > page.getTotalPages()){
+            throw new EntityNotFoundException(HttpStatus.NOT_FOUND, "No further pages available.");
+        }
+        return new ResponseEntity<>(collegeDtoList, HttpStatus.OK);
     }
 }
