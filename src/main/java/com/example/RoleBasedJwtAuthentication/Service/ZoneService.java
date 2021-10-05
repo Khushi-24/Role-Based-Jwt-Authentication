@@ -11,5 +11,5 @@ public interface ZoneService {
 
     ZoneDto getZoneById(String zoneId);
 
-    Page<Zone> findPaginated(int pageNo);
+    Page<ZoneDto> getZoneInPages(int pageNo);
 }

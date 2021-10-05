@@ -9,10 +9,15 @@ import com.example.RoleBasedJwtAuthentication.Service.ZoneService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -55,9 +60,18 @@ public class ZoneServiceImpl implements ZoneService {
     }
 
     @Override
-    public Page<Zone> findPaginated(int pageNo) {
+    public Page<ZoneDto> getZoneInPages(int pageNo) {
         int pageSize = 5;
         Pageable pageable = PageRequest.of(pageNo -1, pageSize);
-        return this.zoneRepository.findAll(pageable);
+        Page<Zone> zoneList = zoneRepository.findAll(pageable);
+        //without using lambda
+//        zoneList.stream().map(new Function<Zone, ZoneDto>() {
+//            @Override
+//            public ZoneDto apply(Zone zone) {
+//                return new ZoneDto(zone.getZoneId(), zone.getZoneFullName());
+//            }
+//        });
+        List<ZoneDto> zoneDtoPage = zoneList.stream().map((Zone zone) -> new ZoneDto(zone.getZoneId(), zone.getZoneFullName())).collect(Collectors.toList());
+        return new PageImpl<ZoneDto>(zoneDtoPage);
     }
 }

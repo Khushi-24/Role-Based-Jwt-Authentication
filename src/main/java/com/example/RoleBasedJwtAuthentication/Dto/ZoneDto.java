@@ -2,6 +2,7 @@ package com.example.RoleBasedJwtAuthentication.Dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
@@ -9,6 +10,7 @@ import javax.validation.constraints.Size;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ZoneDto {
 
@@ -27,4 +29,9 @@ public class ZoneDto {
     private String state;
 
     private Long countOfUniversities;
+
+    public ZoneDto(String zoneId, String zoneFullName) {
+        this.zoneId = zoneId;
+        this.zoneFullName = zoneFullName;
+    }
 }
