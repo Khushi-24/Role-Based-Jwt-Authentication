@@ -51,10 +51,13 @@ public class ZoneServiceImpl implements ZoneService {
     }
 
     @Override
-    public com.example.RoleBasedJwtAuthentication.Dto.ZoneDto getZoneById(String zoneId) {
+    public ZoneDto getZoneById(String zoneId) {
             Zone zone = zoneRepository.findById(zoneId).orElseThrow(() -> new javax.persistence.EntityNotFoundException("Zone does not exist."));
             ZoneDto zoneDto = new ZoneDto();
+
             modelMapper.map(zone, zoneDto);
+            zoneDto.setZoneName(null);
+            zoneDto.setState(null);
             zoneDto.setCountOfUniversities(universityRepository.countByZoneZoneId(zoneId));
             return zoneDto;
     }
@@ -72,6 +75,6 @@ public class ZoneServiceImpl implements ZoneService {
 //            }
 //        });
         List<ZoneDto> zoneDtoPage = zoneList.stream().map((Zone zone) -> new ZoneDto(zone.getZoneId(), zone.getZoneFullName())).collect(Collectors.toList());
-        return new PageImpl<ZoneDto>(zoneDtoPage);
+        return new PageImpl<ZoneDto>(zoneDtoPage, pageable, zoneDtoPage.size());
     }
 }

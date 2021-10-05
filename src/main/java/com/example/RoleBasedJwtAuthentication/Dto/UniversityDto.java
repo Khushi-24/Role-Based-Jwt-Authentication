@@ -28,15 +28,16 @@ public class UniversityDto {
     @NotBlank(message = "Please mention zone code for university.")
     private ZoneDto zone;
 
+    private String zoneFullName;
+
     private Long countOfColleges ;
 
 
-    public UniversityDto(String universityId, String universityName, Zone zone) {
+    public UniversityDto(String universityId, String universityName, String zoneFullName) {
         this.universityId = universityId;
         this.universityName = universityName;
-
-//        BeanUtils.copyProperties(this.zone, zone);
-//        this.zone = (ZoneDto) zone;
-//        this.getZone().getZoneFullName() = zone.getZoneFullName();
+        this.zoneFullName = zoneFullName;
     }
+
+
 }

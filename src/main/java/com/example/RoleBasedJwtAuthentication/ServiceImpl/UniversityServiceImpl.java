@@ -5,6 +5,7 @@ import com.example.RoleBasedJwtAuthentication.CustomException.EntityNotFoundExce
 import com.example.RoleBasedJwtAuthentication.Dto.UniversityDto;
 import com.example.RoleBasedJwtAuthentication.Dto.ZoneDto;
 import com.example.RoleBasedJwtAuthentication.Entity.University;
+import com.example.RoleBasedJwtAuthentication.Entity.Zone;
 import com.example.RoleBasedJwtAuthentication.Repository.CollegeRepository;
 import com.example.RoleBasedJwtAuthentication.Repository.UniversityRepository;
 import com.example.RoleBasedJwtAuthentication.Repository.ZoneRepository;
@@ -57,6 +58,12 @@ public class UniversityServiceImpl implements UniversityService {
             University university = universityRepository.findById(universityId).orElseThrow(() -> new javax.persistence.EntityNotFoundException("University does not exist."));
             UniversityDto universityDto = new UniversityDto();
             modelMapper.map(university, universityDto);
+            universityDto.setUniversityCity(null);
+            ZoneDto zone = universityDto.getZone();
+            zone.setZoneName(null);
+            zone.setState(null);
+            universityDto.setZone(zone);
+            universityDto.setZoneFullName(null);
             universityDto.setCountOfColleges(collegeRepository.countByUniversityUniversityId(universityId));
             return universityDto;
 
@@ -70,7 +77,7 @@ public class UniversityServiceImpl implements UniversityService {
         int pageSize = 5;
         Pageable pageable = PageRequest.of(pageNo -1, pageSize);
         Page<University> universities = universityRepository.findAll(pageable);
-        List<UniversityDto> universityDtoList = universities.stream().map((University u) -> new UniversityDto(u.getUniversityId(), u.getUniversityName(), u.getZone())).collect(Collectors.toList());
+        List<UniversityDto> universityDtoList = universities.stream().map((University u) -> new UniversityDto(u.getUniversityId(), u.getUniversityName(), u.getZone().getZoneFullName())).collect(Collectors.toList());
         return new PageImpl<UniversityDto>(universityDtoList,  pageable, universityDtoList.size());
     }
 }
