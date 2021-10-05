@@ -19,4 +19,6 @@ public interface CollegeDepartmentRepository extends JpaRepository<CollegeDepart
 
     @Query(value = "Select Count(DISTINCT p.professor_id) from college_department as c INNER JOIN professor_department as p ON c.college_department_id = p.department_id WHERE college_college_id= ?", nativeQuery = true)
     Long countByCollegeCollegeId(Long collegeId);
+
+//    Long countByCollegeCollegeId(Long collegeId);
 }

@@ -1,13 +1,12 @@
 package com.example.RoleBasedJwtAuthentication.Controller;
 
+import com.example.RoleBasedJwtAuthentication.Dto.CollegeDto;
 import com.example.RoleBasedJwtAuthentication.Dto.DepartmentDto;
 import com.example.RoleBasedJwtAuthentication.Service.DepartmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,5 +18,11 @@ public class DepartmentController {
     public ResponseEntity<?> addDepartment(@RequestBody DepartmentDto departmentDto){
         DepartmentDto dto = departmentService.addDepartment(departmentDto);
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/getDepartmentById/{departmentId}")
+    public ResponseEntity<?> getDepartmentById(@PathVariable Long departmentId){
+        DepartmentDto dto = departmentService.getDepartmentById(departmentId);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 }

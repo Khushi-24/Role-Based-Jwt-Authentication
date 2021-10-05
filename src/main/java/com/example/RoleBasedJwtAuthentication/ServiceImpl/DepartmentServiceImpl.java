@@ -2,6 +2,7 @@ package com.example.RoleBasedJwtAuthentication.ServiceImpl;
 
 import com.example.RoleBasedJwtAuthentication.CustomException.EntityAlreadyExistsException;
 import com.example.RoleBasedJwtAuthentication.Dto.DepartmentDto;
+import com.example.RoleBasedJwtAuthentication.Entity.College;
 import com.example.RoleBasedJwtAuthentication.Entity.Department;
 import com.example.RoleBasedJwtAuthentication.Repository.DepartmentRepository;
 import com.example.RoleBasedJwtAuthentication.Service.DepartmentService;
@@ -27,5 +28,14 @@ public class DepartmentServiceImpl implements DepartmentService {
         }else{
             throw new EntityAlreadyExistsException(HttpStatus.CONFLICT, "Department Already Exists.");
         }
+    }
+
+    @Override
+    public DepartmentDto getDepartmentById(Long departmentId) {
+
+        Department department = departmentRepository.findById(departmentId).orElseThrow(() -> new javax.persistence.EntityNotFoundException("Department does not exist."));
+        DepartmentDto departmentDto = new DepartmentDto();
+        modelMapper.map(department, departmentDto);
+        return departmentDto;
     }
 }

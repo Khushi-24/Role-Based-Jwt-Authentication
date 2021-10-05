@@ -21,4 +21,6 @@ public class DepartmentDto {
 
     @NotBlank(message = "Duration can't be null.")
     private String duration;
+
+    private Long countOfColleges;
 }
