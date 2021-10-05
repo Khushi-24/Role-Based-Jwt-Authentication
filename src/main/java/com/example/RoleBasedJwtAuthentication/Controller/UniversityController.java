@@ -32,8 +32,8 @@ public class UniversityController {
 
     @GetMapping("/getAllUniversities/{pageNo}")
     public ResponseEntity<?> findPaginated(@PathVariable(value = "pageNo") int pageNo){
-        Page<University> page = universityService.findPaginated(pageNo);
-        List<University> universityList = page.getContent();
+        Page<UniversityDto> page = universityService.findPaginated(pageNo);
+        List<UniversityDto> universityList = page.getContent();
         if(pageNo > page.getTotalPages()){
             throw new EntityNotFoundException(HttpStatus.NOT_FOUND, "No further pages available.");
         }

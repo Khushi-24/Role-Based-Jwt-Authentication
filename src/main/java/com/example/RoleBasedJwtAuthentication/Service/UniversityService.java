@@ -9,5 +9,5 @@ public interface UniversityService {
 
     UniversityDto getUniversityById(String universityId);
 
-    Page<University> findPaginated(int pageNo);
+    Page<UniversityDto> findPaginated(int pageNo);
 }

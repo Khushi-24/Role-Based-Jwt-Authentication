@@ -3,6 +3,7 @@ package com.example.RoleBasedJwtAuthentication.ServiceImpl;
 import com.example.RoleBasedJwtAuthentication.CustomException.EntityAlreadyExistsException;
 import com.example.RoleBasedJwtAuthentication.CustomException.EntityNotFoundException;
 import com.example.RoleBasedJwtAuthentication.Dto.UniversityDto;
+import com.example.RoleBasedJwtAuthentication.Dto.ZoneDto;
 import com.example.RoleBasedJwtAuthentication.Entity.University;
 import com.example.RoleBasedJwtAuthentication.Repository.CollegeRepository;
 import com.example.RoleBasedJwtAuthentication.Repository.UniversityRepository;
@@ -11,10 +12,14 @@ import com.example.RoleBasedJwtAuthentication.Service.UniversityService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -61,9 +66,11 @@ public class UniversityServiceImpl implements UniversityService {
     }
 
     @Override
-    public Page<University> findPaginated(int pageNo) {
+    public Page<UniversityDto> findPaginated(int pageNo) {
         int pageSize = 5;
         Pageable pageable = PageRequest.of(pageNo -1, pageSize);
-        return this.universityRepository.findAll(pageable);
+        Page<University> universities = universityRepository.findAll(pageable);
+        List<UniversityDto> universityDtoList = universities.stream().map((University u) -> new UniversityDto(u.getUniversityId(), u.getUniversityName(), u.getZone())).collect(Collectors.toList());
+        return new PageImpl<UniversityDto>(universityDtoList,  pageable, universityDtoList.size());
     }
 }
