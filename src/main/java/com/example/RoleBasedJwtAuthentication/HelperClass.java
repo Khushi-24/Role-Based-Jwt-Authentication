@@ -10,8 +10,9 @@ public class HelperClass {
         return zoneDto;
     }
 
-    public UniversityDto nullUniversityCity(UniversityDto universityDto){
+    public UniversityDto nullUniversityCityAndZoneFullName(UniversityDto universityDto){
         universityDto.setUniversityCity(null);
+        universityDto.setZoneFullName(null);
         return universityDto;
     }
 
@@ -27,8 +28,9 @@ public class HelperClass {
         return studentDto;
     }
 
-    public CollegeDto nullCollegeCity(CollegeDto collegeDto){
+    public CollegeDto nullUniversityNameAndCollegeCity(CollegeDto collegeDto){
         collegeDto.setCollegeCity(null);
+        collegeDto.setUniversityName(null);
         return collegeDto;
     }
 }

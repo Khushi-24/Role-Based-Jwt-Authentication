@@ -86,8 +86,8 @@ public class StudentServiceImpl implements StudentService {
         dto.setDepartmentId(null);
         DepartmentDto departmentDto = helperClass.nullDepartmentDuration(dto.getDepartment());
         dto.setDepartment(departmentDto);
-        CollegeDto collegeDto = helperClass.nullCollegeCity(dto.getCollege());
-        UniversityDto universityDto = helperClass.nullUniversityCity(collegeDto.getUniversity());
+        CollegeDto collegeDto = helperClass.nullUniversityNameAndCollegeCity(dto.getCollege());
+        UniversityDto universityDto = helperClass.nullUniversityCityAndZoneFullName(collegeDto.getUniversity());
         universityDto.setZone(null);
         collegeDto.setUniversity(universityDto);
         collegeDto.setUniversityName(null);
