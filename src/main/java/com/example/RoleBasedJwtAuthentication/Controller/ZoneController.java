@@ -21,20 +21,21 @@ public class ZoneController {
     private final ZoneService zoneService;
 
     @PostMapping("/addZone")
+    @PreAuthorize("hasRole('Principal')")
     public ResponseEntity<?> addZone(@Valid @RequestBody ZoneDto zoneDto){
         ZoneDto dto = zoneService.addZone(zoneDto);
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasRole('Principal')")
     @GetMapping("/getZoneById/{zoneId}")
+    @PreAuthorize("hasAnyRole('Teacher','Principal','student')")
     public ResponseEntity<?> getZoneById(@PathVariable String zoneId){
         ZoneDto dto = zoneService.getZoneById(zoneId);
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
     @GetMapping("/getAllZones/{pageNo}")
-    @PreAuthorize("hasRole('student')")
+    @PreAuthorize("hasAnyRole('Teacher','Principal','student')")
     public ResponseEntity<?> getZoneInPages(@PathVariable(value = "pageNo") int pageNo){
         //getting page of zoneDto
         Page<ZoneDto> page = zoneService.getZoneInPages(pageNo);
