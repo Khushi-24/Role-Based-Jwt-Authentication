@@ -20,7 +20,7 @@ public class StudentController {
     private final StudentService studentService;
 
     @PostMapping("/addStudent")
-    @PreAuthorize("hasAnyRole('Teacher','Principal','student')")
+    @PreAuthorize("hasAnyRole('Teacher','Principal')")
     public ResponseEntity<?> addStudent(@RequestBody StudentDto studentDto){
         StudentDto dto = studentService.addStudent(studentDto);
         return  new ResponseEntity<>(dto, HttpStatus.CREATED);
