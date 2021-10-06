@@ -39,4 +39,16 @@ public class StudentController {
         }
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
+
+    @GetMapping("/getStudentHavingCpiGreaterThan/{cpi}")
+    public ResponseEntity<?> getStudentHavingCpiGreaterThan(@PathVariable float cpi){
+        int count= studentService.getStudentHavingCpiGreaterThan(cpi);
+        return new ResponseEntity<>(count, HttpStatus.OK);
+    }
+
+    @GetMapping("/getStudentHavingCpiLessThan/{cpi}")
+    public ResponseEntity<?> getStudentHavingCpiLessThan(@PathVariable float cpi){
+        int count= studentService.getStudentHavingCpiLessThan(cpi);
+        return new ResponseEntity<>(count, HttpStatus.OK);
+    }
 }

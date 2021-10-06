@@ -1,5 +1,6 @@
 package com.example.RoleBasedJwtAuthentication.ServiceImpl;
 
+import com.example.RoleBasedJwtAuthentication.CustomException.BadRequestException;
 import com.example.RoleBasedJwtAuthentication.CustomException.EntityAlreadyExistsException;
 import com.example.RoleBasedJwtAuthentication.CustomException.EntityNotFoundException;
 import com.example.RoleBasedJwtAuthentication.Dto.*;
@@ -91,6 +92,8 @@ public class StudentServiceImpl implements StudentService {
         collegeDto.setUniversity(universityDto);
         collegeDto.setUniversityName(null);
         dto.setCollege(collegeDto);
+        studentDto.setCollegeName(null);
+        studentDto.setDepartmentName(null);
         return studentDto;
     }
 
@@ -109,6 +112,26 @@ public class StudentServiceImpl implements StudentService {
                         student.getCollegeDepartment().getCollege().getUniversity().getZone().getZoneFullName()
                         )).collect(Collectors.toList());
         return new PageImpl<>(studentDtoList,  pageable, studentDtoList.size());
+    }
+
+    @Override
+    public int getStudentHavingCpiGreaterThan(float cpi) {
+        if(cpi >=10){
+            throw new BadRequestException(HttpStatus.BAD_REQUEST,"Cpi can't be greater than 10.");
+        }else {
+            int count = studentRepository.countByCpiGraterThan(cpi);
+            return count;
+        }
+    }
+
+    @Override
+    public int getStudentHavingCpiLessThan(float cpi) {
+        if(cpi >=10){
+            throw new BadRequestException(HttpStatus.BAD_REQUEST,"Cpi can't be greater than 10.");
+        }else {
+            int count = studentRepository.countByCpiLessThan(cpi);
+            return count;
+        }
     }
 
     public String getEncodedPassword(String password) {

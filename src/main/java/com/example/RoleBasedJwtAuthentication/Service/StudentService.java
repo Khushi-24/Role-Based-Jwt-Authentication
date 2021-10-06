@@ -9,4 +9,8 @@ public interface StudentService {
     StudentDto getStudentByStudentId(String studentId);
 
     Page<StudentDto> getAllStudents(int pageNo);
+
+    int getStudentHavingCpiGreaterThan(float cpi);
+
+    int getStudentHavingCpiLessThan(float cpi);
 }
