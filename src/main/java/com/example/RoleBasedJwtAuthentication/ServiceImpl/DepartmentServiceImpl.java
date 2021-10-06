@@ -49,6 +49,8 @@ public class DepartmentServiceImpl implements DepartmentService {
         DepartmentDto departmentDto = new DepartmentDto();
         modelMapper.map(department, departmentDto);
         departmentDto.setCountOfColleges(collegeDepartmentRepository.countByDepartmentDepartmentId(departmentId));
+        departmentDto.setCountOfUniversities(departmentRepository.countUniversityByDepartmentId(departmentId));
+        departmentDto.setCountOfZones(departmentRepository.countOfZonesByDepartmentId(departmentId));
         departmentDto.setCountOfProfessors(professorDepartmentRepository.countByDepartmentDepartmentId(departmentId));
         departmentDto.setCountOfStudents(collegeDepartmentRepository.countOfStudentsByDepartmentId(departmentId));
         departmentDto.setDuration(null);

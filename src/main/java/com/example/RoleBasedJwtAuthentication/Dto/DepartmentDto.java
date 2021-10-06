@@ -28,6 +28,10 @@ public class DepartmentDto {
 
     private Long countOfColleges;
 
+    private Long countOfUniversities;
+
+    private Long countOfZones;
+
     private Long countOfProfessors;
 
     private Long countOfStudents;
