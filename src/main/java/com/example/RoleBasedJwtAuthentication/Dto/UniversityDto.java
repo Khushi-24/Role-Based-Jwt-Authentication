@@ -32,6 +32,12 @@ public class UniversityDto {
 
     private Long countOfColleges ;
 
+    private Long countOfStudents;
+
+    private Long countOfDepartments;
+
+    private Long countOfProfessors;
+
 
     public UniversityDto(String universityId, String universityName, String zoneFullName) {
         this.universityId = universityId;

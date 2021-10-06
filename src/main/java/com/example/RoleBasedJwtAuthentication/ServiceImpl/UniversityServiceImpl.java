@@ -65,6 +65,9 @@ public class UniversityServiceImpl implements UniversityService {
             universityDto.setZone(zone);
             universityDto.setZoneFullName(null);
             universityDto.setCountOfColleges(collegeRepository.countByUniversityUniversityId(universityId));
+            universityDto.setCountOfStudents(collegeRepository.countOfStudentsByUniversityId(universityId));
+            universityDto.setCountOfDepartments(collegeRepository.countOfDepartmentByUniversityId(universityId));
+            universityDto.setCountOfProfessors(collegeRepository.countOfProfessorByUniversityId(universityId));
             return universityDto;
 
         }else{
