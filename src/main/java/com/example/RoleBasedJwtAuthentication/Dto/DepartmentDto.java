@@ -23,4 +23,8 @@ public class DepartmentDto {
     private String duration;
 
     private Long countOfColleges;
+
+    private Long countOfProfessors;
+
+    private Long countOfStudents;
 }

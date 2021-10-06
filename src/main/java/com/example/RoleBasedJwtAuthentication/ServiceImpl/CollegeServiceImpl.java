@@ -1,6 +1,5 @@
 package com.example.RoleBasedJwtAuthentication.ServiceImpl;
 
-import com.example.RoleBasedJwtAuthentication.CustomException.BadRequestException;
 import com.example.RoleBasedJwtAuthentication.CustomException.EntityAlreadyExistsException;
 import com.example.RoleBasedJwtAuthentication.CustomException.EntityNotFoundException;
 import com.example.RoleBasedJwtAuthentication.Dto.CollegeDepartmentDto;
@@ -10,7 +9,6 @@ import com.example.RoleBasedJwtAuthentication.Dto.ZoneDto;
 import com.example.RoleBasedJwtAuthentication.Entity.College;
 import com.example.RoleBasedJwtAuthentication.Entity.CollegeDepartment;
 import com.example.RoleBasedJwtAuthentication.Entity.Department;
-import com.example.RoleBasedJwtAuthentication.Entity.University;
 import com.example.RoleBasedJwtAuthentication.Repository.*;
 import com.example.RoleBasedJwtAuthentication.Service.CollegeService;
 import lombok.RequiredArgsConstructor;
@@ -87,7 +85,7 @@ public class CollegeServiceImpl implements CollegeService {
         collegeDto.setCountOfStudent(studentRepository.countByCollegeDepartmentCollegeCollegeId(collegeId));
         collegeDto.setCountOfPrincipal(principalRepository.countByCollegeCollegeId(collegeId));
         collegeDto.setCountOfDepartment(departmentRepository.countByCollegeDepartmentSetCollegeCollegeId(collegeId));
-        collegeDto.setCountOfProfessors(collegeDepartmentRepository.countByCollegeCollegeId(collegeId));
+        collegeDto.setCountOfProfessors(collegeDepartmentRepository.countOfProfessorsByDepartmentID(collegeId));
         collegeDto.setCollegeCity(null);
         UniversityDto universityDto = collegeDto.getUniversity();
         universityDto.setUniversityId(null);

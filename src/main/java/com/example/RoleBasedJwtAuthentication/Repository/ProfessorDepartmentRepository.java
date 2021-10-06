@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProfessorDepartmentRepository extends JpaRepository<ProfessorDepartment, Long> {
     boolean existsByProfessorAndDepartment(Professor professor, Department department);
+
+    Long countByDepartmentDepartmentId(Long departmentId);
 }
