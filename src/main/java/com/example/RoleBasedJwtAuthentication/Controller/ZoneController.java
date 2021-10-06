@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -25,6 +26,7 @@ public class ZoneController {
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasRole('Principal')")
     @GetMapping("/getZoneById/{zoneId}")
     public ResponseEntity<?> getZoneById(@PathVariable String zoneId){
         ZoneDto dto = zoneService.getZoneById(zoneId);
@@ -32,6 +34,7 @@ public class ZoneController {
     }
 
     @GetMapping("/getAllZones/{pageNo}")
+    @PreAuthorize("hasRole('student')")
     public ResponseEntity<?> getZoneInPages(@PathVariable(value = "pageNo") int pageNo){
         //getting page of zoneDto
         Page<ZoneDto> page = zoneService.getZoneInPages(pageNo);

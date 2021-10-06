@@ -42,6 +42,7 @@ public class JwtServiceImpl implements UserDetailsService {
         String newGeneratedToken = jwtUtil.generateToken(userDetails);
 
         User user = userRepository.findById(userName).get();
+        user.setUserPassword(null);
         return new JwtResponse(user, newGeneratedToken);
     }
 
@@ -65,7 +66,7 @@ public class JwtServiceImpl implements UserDetailsService {
 //        user.forEach(role -> {
 //            authorities.add(new SimpleGrantedAuthority("ROLE_" + "User"));
 //        });
-        authorities.add(new SimpleGrantedAuthority("ROLE_" + "User"));
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getUserRole()));
         return authorities;
     }
 

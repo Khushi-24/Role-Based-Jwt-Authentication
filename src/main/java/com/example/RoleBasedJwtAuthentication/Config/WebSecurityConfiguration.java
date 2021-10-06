@@ -53,11 +53,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception{
-        http.cors().and().csrf().disable().
-                authorizeRequests()
-                //.antMatchers(Arrays.asList(environment.getProperty("spring.datasource.url").split("/"))
-                // .contains(/*Mention Live Database Here*/"kiwe_live")?getOtherFilters():get8081Filters()).permitAll()
-                .antMatchers(get8081Filters()).permitAll()
+        http.cors();
+        http.csrf().disable()
+                .authorizeRequests().antMatchers("/authenticate", "/addUser").permitAll()
+                .antMatchers(HttpHeaders.ALLOW).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
