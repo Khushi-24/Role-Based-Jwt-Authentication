@@ -30,6 +30,14 @@ public class ZoneDto {
 
     private Long countOfUniversities;
 
+    private Long countOfColleges;
+
+    private Long countOfStudents;
+
+    private Long countOfDepartments;
+
+    private Long countOfProfessors;
+
     public ZoneDto(String zoneId, String zoneFullName) {
         this.zoneId = zoneId;
         this.zoneFullName = zoneFullName;

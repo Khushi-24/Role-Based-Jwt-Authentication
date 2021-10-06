@@ -59,6 +59,10 @@ public class ZoneServiceImpl implements ZoneService {
             zoneDto.setZoneName(null);
             zoneDto.setState(null);
             zoneDto.setCountOfUniversities(universityRepository.countByZoneZoneId(zoneId));
+            zoneDto.setCountOfColleges(universityRepository.countCollegesByZoneId(zoneId));
+            zoneDto.setCountOfStudents(universityRepository.countOfStudentsByZoneId(zoneId));
+            zoneDto.setCountOfDepartments(universityRepository.countOfDepartmentByZoneId(zoneId));
+            zoneDto.setCountOfProfessors(universityRepository.countOfProfessorByZoneId(zoneId));
             return zoneDto;
     }
 
@@ -72,9 +76,8 @@ public class ZoneServiceImpl implements ZoneService {
 //            @Override
 //            public ZoneDto apply(Zone zone) {
 //                return new ZoneDto(zone.getZoneId(), zone.getZoneFullName());
-//            }
 //        });
         List<ZoneDto> zoneDtoPage = zoneList.stream().map((Zone zone) -> new ZoneDto(zone.getZoneId(), zone.getZoneFullName())).collect(Collectors.toList());
-        return new PageImpl<ZoneDto>(zoneDtoPage, pageable, zoneDtoPage.size());
+        return new PageImpl<>(zoneDtoPage, pageable, zoneDtoPage.size());
     }
 }

@@ -1,15 +1,19 @@
 package com.example.RoleBasedJwtAuthentication.Dto;
 
+import com.example.RoleBasedJwtAuthentication.Entity.CollegeDepartment;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
+import java.util.Set;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class DepartmentDto {
 
@@ -27,4 +31,9 @@ public class DepartmentDto {
     private Long countOfProfessors;
 
     private Long countOfStudents;
+
+    public DepartmentDto(Long departmentId, String departmentName) {
+        this.departmentId = departmentId;
+        this.departmentName = departmentName;
+    }
 }
