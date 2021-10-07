@@ -5,7 +5,7 @@ import com.example.RoleBasedJwtAuthentication.CustomException.EntityNotFoundExce
 import com.example.RoleBasedJwtAuthentication.Dto.UniversityDto;
 import com.example.RoleBasedJwtAuthentication.Dto.ZoneDto;
 import com.example.RoleBasedJwtAuthentication.Entity.University;
-import com.example.RoleBasedJwtAuthentication.Entity.Zone;
+import com.example.RoleBasedJwtAuthentication.HelperClass;
 import com.example.RoleBasedJwtAuthentication.Repository.CollegeRepository;
 import com.example.RoleBasedJwtAuthentication.Repository.UniversityRepository;
 import com.example.RoleBasedJwtAuthentication.Repository.ZoneRepository;
@@ -55,15 +55,13 @@ public class UniversityServiceImpl implements UniversityService {
     public UniversityDto getUniversityById(String universityId) {
 
         if(universityRepository.existsById(universityId)) {
+            HelperClass helperClass = new HelperClass();
             University university = universityRepository.findById(universityId).orElseThrow(() -> new javax.persistence.EntityNotFoundException("University does not exist."));
             UniversityDto universityDto = new UniversityDto();
             modelMapper.map(university, universityDto);
-            universityDto.setUniversityCity(null);
-            ZoneDto zone = universityDto.getZone();
-            zone.setZoneName(null);
-            zone.setState(null);
+            helperClass.nullUniversityCityAndZoneFullName(universityDto);
+            ZoneDto zone = helperClass.nullZoneNameAndCity(universityDto.getZone());
             universityDto.setZone(zone);
-            universityDto.setZoneFullName(null);
             universityDto.setCountOfColleges(collegeRepository.countByUniversityUniversityId(universityId));
             universityDto.setCountOfStudents(collegeRepository.countOfStudentsByUniversityId(universityId));
             universityDto.setCountOfDepartments(collegeRepository.countOfDepartmentByUniversityId(universityId));
@@ -85,6 +83,6 @@ public class UniversityServiceImpl implements UniversityService {
                         u.getUniversityId(),
                         u.getUniversityName(),
                         u.getZone().getZoneFullName())).collect(Collectors.toList());
-        return new PageImpl<UniversityDto>(universityDtoList,  pageable, universityDtoList.size());
+        return new PageImpl<>(universityDtoList,  pageable, universityDtoList.size());
     }
 }

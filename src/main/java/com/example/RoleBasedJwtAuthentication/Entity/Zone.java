@@ -1,6 +1,5 @@
 package com.example.RoleBasedJwtAuthentication.Entity;
 
-import com.example.RoleBasedJwtAuthentication.Entity.University;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;

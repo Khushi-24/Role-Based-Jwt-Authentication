@@ -9,6 +9,7 @@ import com.example.RoleBasedJwtAuthentication.Dto.ZoneDto;
 import com.example.RoleBasedJwtAuthentication.Entity.College;
 import com.example.RoleBasedJwtAuthentication.Entity.CollegeDepartment;
 import com.example.RoleBasedJwtAuthentication.Entity.Department;
+import com.example.RoleBasedJwtAuthentication.HelperClass;
 import com.example.RoleBasedJwtAuthentication.Repository.*;
 import com.example.RoleBasedJwtAuthentication.Service.CollegeService;
 import lombok.RequiredArgsConstructor;
@@ -79,6 +80,7 @@ public class CollegeServiceImpl implements CollegeService {
     @Override
     public CollegeDto getCollegeById(Long collegeId) {
 
+        HelperClass helperClass = new HelperClass();
         College college = collegeRepository.findById(collegeId).orElseThrow(() -> new javax.persistence.EntityNotFoundException("College does not exist."));
         CollegeDto collegeDto = new CollegeDto();
         modelMapper.map(college, collegeDto);
@@ -86,18 +88,11 @@ public class CollegeServiceImpl implements CollegeService {
         collegeDto.setCountOfPrincipal(principalRepository.countByCollegeCollegeId(collegeId));
         collegeDto.setCountOfDepartment(departmentRepository.countByCollegeDepartmentSetCollegeCollegeId(collegeId));
         collegeDto.setCountOfProfessors(collegeDepartmentRepository.countOfProfessorsByDepartmentID(collegeId));
-        collegeDto.setCollegeCity(null);
-        UniversityDto universityDto = collegeDto.getUniversity();
-        universityDto.setUniversityId(null);
-        universityDto.setUniversityCity(null);
-        ZoneDto zoneDto = collegeDto.getUniversity().getZone();
-        zoneDto.setZoneId(null);
-        zoneDto.setZoneName(null);
-        zoneDto.setState(null);
+        helperClass.nullUniversityNameAndCollegeCity(collegeDto);
+        UniversityDto universityDto = helperClass.nullUniversityCityAndZoneFullName(collegeDto.getUniversity());
+        ZoneDto zoneDto = helperClass.nullZoneNameAndCity(collegeDto.getUniversity().getZone());
         universityDto.setZone(zoneDto);
-        universityDto.setZoneFullName(null);
         collegeDto.setUniversity(universityDto);
-        collegeDto.setUniversityName(null);
         return collegeDto;
     }
 
@@ -112,7 +107,7 @@ public class CollegeServiceImpl implements CollegeService {
                         college.getCollegeName(),
                         college.getUniversity().getUniversityName(),
                         college.getUniversity().getZone().getZoneFullName())).collect(Collectors.toList());
-        return new PageImpl<CollegeDto>(collegeDtoList,  pageable, collegeDtoList.size());
+        return new PageImpl<>(collegeDtoList,  pageable, collegeDtoList.size());
 
     }
 

@@ -2,10 +2,12 @@ package com.example.RoleBasedJwtAuthentication.ServiceImpl;
 
 import com.example.RoleBasedJwtAuthentication.CustomException.EntityAlreadyExistsException;
 import com.example.RoleBasedJwtAuthentication.CustomException.EntityNotFoundException;
-import com.example.RoleBasedJwtAuthentication.Dto.CollegeDto;
 import com.example.RoleBasedJwtAuthentication.Dto.ProfessorDepartmentDto;
 import com.example.RoleBasedJwtAuthentication.Dto.ProfessorDto;
-import com.example.RoleBasedJwtAuthentication.Entity.*;
+import com.example.RoleBasedJwtAuthentication.Entity.Department;
+import com.example.RoleBasedJwtAuthentication.Entity.Professor;
+import com.example.RoleBasedJwtAuthentication.Entity.ProfessorDepartment;
+import com.example.RoleBasedJwtAuthentication.Entity.User;
 import com.example.RoleBasedJwtAuthentication.Repository.DepartmentRepository;
 import com.example.RoleBasedJwtAuthentication.Repository.ProfessorDepartmentRepository;
 import com.example.RoleBasedJwtAuthentication.Repository.ProfessorRepository;
@@ -50,7 +52,7 @@ public class ProfessorServiceImpl implements ProfessorService {
             user.setUserPassword(professor.getProfessorPassword());
             user.setUserRole("Teacher");
             userRepository.save(user);
-            professorDto.setProfessorPassword("Null");
+            professorDto.setProfessorPassword(null);
             return professorDto;
         }else{
             throw new EntityAlreadyExistsException(HttpStatus.CONFLICT, "Professor already exists.");

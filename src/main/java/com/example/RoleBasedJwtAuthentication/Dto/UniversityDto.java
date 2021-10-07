@@ -1,12 +1,9 @@
 package com.example.RoleBasedJwtAuthentication.Dto;
 
-import com.example.RoleBasedJwtAuthentication.Dto.ZoneDto;
-import com.example.RoleBasedJwtAuthentication.Entity.Zone;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.beans.BeanUtils;
 
 import javax.validation.constraints.NotBlank;
 
@@ -30,14 +27,13 @@ public class UniversityDto {
 
     private String zoneFullName;
 
-    private Long countOfColleges ;
+    private Long countOfColleges;
 
     private Long countOfStudents;
 
     private Long countOfDepartments;
 
     private Long countOfProfessors;
-
 
     public UniversityDto(String universityId, String universityName, String zoneFullName) {
         this.universityId = universityId;

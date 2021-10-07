@@ -1,9 +1,7 @@
 package com.example.RoleBasedJwtAuthentication.Controller;
 
 import com.example.RoleBasedJwtAuthentication.CustomException.EntityNotFoundException;
-import com.example.RoleBasedJwtAuthentication.Dto.CollegeDto;
 import com.example.RoleBasedJwtAuthentication.Dto.DepartmentDto;
-import com.example.RoleBasedJwtAuthentication.Dto.ZoneDto;
 import com.example.RoleBasedJwtAuthentication.Service.DepartmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

@@ -6,7 +6,6 @@ import com.example.RoleBasedJwtAuthentication.Dto.CollegeDto;
 import com.example.RoleBasedJwtAuthentication.Dto.PrincipalDto;
 import com.example.RoleBasedJwtAuthentication.Dto.UniversityDto;
 import com.example.RoleBasedJwtAuthentication.Dto.ZoneDto;
-import com.example.RoleBasedJwtAuthentication.Entity.College;
 import com.example.RoleBasedJwtAuthentication.Entity.Principal;
 import com.example.RoleBasedJwtAuthentication.Entity.User;
 import com.example.RoleBasedJwtAuthentication.HelperClass;
@@ -49,14 +48,17 @@ public class PrincipalServiceImpl implements PrincipalService {
                     modelMapper.getConfiguration().setAmbiguityIgnored(true);
                     modelMapper.map(principalDto, principal);
                     principal.setPrincipalPassword(getEncodedPassword(principalDto.getPrincipalPassword()));
-                    principalRepository.save(principal);
-                    user.setUserName(principal.getPrincipalId());
-                    user.setUserPassword(principal.getPrincipalPassword());
-                    user.setUserRole("Principal");
-                    userRepository.save(user);
+                    if(!userRepository.existsById(principal.getPrincipalId())){
+                        user.setUserName(principal.getPrincipalId());
+                        user.setUserPassword(principal.getPrincipalPassword());
+                        user.setUserRole("Principal");
+                        userRepository.save(user);
+                        principalRepository.save(principal);
+                    }else{
+                        throw new EntityAlreadyExistsException(HttpStatus.CONFLICT, "Principal id is not available.");
+                    }
                     return principalDto;
                 }
-
             }else{
                 throw new EntityNotFoundException(HttpStatus.NOT_FOUND, "Please enter valid college id, college id doesn't exists.");
             }

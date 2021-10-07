@@ -22,7 +22,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Service
-//@RequiredArgsConstructor
 public class JwtServiceImpl implements UserDetailsService {
 
     @Autowired
@@ -69,9 +68,6 @@ public class JwtServiceImpl implements UserDetailsService {
 
     private Set getAuthority(User user) {
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-//        user.forEach(role -> {
-//            authorities.add(new SimpleGrantedAuthority("ROLE_" + "User"));
-//        });
         authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getUserRole()));
         return authorities;
     }

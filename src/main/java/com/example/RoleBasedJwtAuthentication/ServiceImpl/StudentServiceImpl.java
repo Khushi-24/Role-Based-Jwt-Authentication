@@ -30,7 +30,6 @@ public class StudentServiceImpl implements StudentService {
     private final CollegeRepository collegeRepository;
     private final DepartmentRepository departmentRepository;
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
     private final ModelMapper modelMapper = new ModelMapper();
     private final PasswordEncoder passwordEncoder;
 

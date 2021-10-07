@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 
 @Getter
@@ -14,13 +13,13 @@ import javax.validation.constraints.NotNull;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProfessorDto {
 
-    @NotNull(message ="Professor Id can't be null")
+    @NotNull(message = "Professor Id can't be null")
     private String professorId;
 
-    @NotNull(message ="Professor name can't be null")
+    @NotNull(message = "Professor name can't be null")
     private String professorName;
 
-    @NotNull(message ="Professor password can't be null")
+    @NotNull(message = "Professor password can't be null")
     private String professorPassword;
 
     private Long countOfDepartment;

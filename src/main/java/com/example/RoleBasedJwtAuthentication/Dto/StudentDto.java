@@ -1,7 +1,5 @@
 package com.example.RoleBasedJwtAuthentication.Dto;
 
-import com.example.RoleBasedJwtAuthentication.Entity.CollegeDepartment;
-import com.example.RoleBasedJwtAuthentication.Entity.Department;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,7 +1,6 @@
 package com.example.RoleBasedJwtAuthentication.ServiceImpl;
 
 import com.example.RoleBasedJwtAuthentication.CustomException.BadRequestException;
-import com.example.RoleBasedJwtAuthentication.Entity.Student;
 import com.example.RoleBasedJwtAuthentication.Entity.User;
 import com.example.RoleBasedJwtAuthentication.Repository.UserRepository;
 import com.example.RoleBasedJwtAuthentication.Service.UserService;

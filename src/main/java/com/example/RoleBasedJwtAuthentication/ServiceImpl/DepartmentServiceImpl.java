@@ -1,9 +1,7 @@
 package com.example.RoleBasedJwtAuthentication.ServiceImpl;
 
 import com.example.RoleBasedJwtAuthentication.CustomException.EntityAlreadyExistsException;
-import com.example.RoleBasedJwtAuthentication.Dto.CollegeDto;
 import com.example.RoleBasedJwtAuthentication.Dto.DepartmentDto;
-import com.example.RoleBasedJwtAuthentication.Entity.College;
 import com.example.RoleBasedJwtAuthentication.Entity.Department;
 import com.example.RoleBasedJwtAuthentication.Repository.CollegeDepartmentRepository;
 import com.example.RoleBasedJwtAuthentication.Repository.DepartmentRepository;
@@ -32,12 +30,12 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public DepartmentDto addDepartment(DepartmentDto departmentDto) {
-        if(!departmentRepository.existsById(departmentDto.getDepartmentId())){
+        if (!departmentRepository.existsById(departmentDto.getDepartmentId())) {
             Department department = new Department();
             modelMapper.map(departmentDto, department);
             departmentRepository.save(department);
             return departmentDto;
-        }else{
+        } else {
             throw new EntityAlreadyExistsException(HttpStatus.CONFLICT, "Department Already Exists.");
         }
     }
@@ -60,12 +58,12 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public Page<DepartmentDto> getAllDepartment(int pageNo) {
         int pageSize = 5;
-        Pageable pageable = PageRequest.of(pageNo -1, pageSize);
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
         Page<Department> departments = departmentRepository.findAll(pageable);
         List<DepartmentDto> departmentDtoList = departments.stream().map((Department department) ->
                 new DepartmentDto(
                         department.getDepartmentId(),
                         department.getDepartmentName())).collect(Collectors.toList());
-        return new PageImpl<>(departmentDtoList,  pageable, departmentDtoList.size());
+        return new PageImpl<>(departmentDtoList, pageable, departmentDtoList.size());
     }
 }

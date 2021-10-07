@@ -1,6 +1,5 @@
 package com.example.RoleBasedJwtAuthentication.Dto;
 
-import com.example.RoleBasedJwtAuthentication.Entity.College;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,7 +28,9 @@ public class PrincipalDto {
     private Long countOfStudents;
 
     private String collegeName;
+
     private String universityName;
+
     private String zoneFullName;
 
     public PrincipalDto(String principalId, String principalName, String collegeName, String universityName, String zoneFullName) {

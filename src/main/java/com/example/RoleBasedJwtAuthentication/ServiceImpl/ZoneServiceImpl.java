@@ -3,6 +3,7 @@ package com.example.RoleBasedJwtAuthentication.ServiceImpl;
 import com.example.RoleBasedJwtAuthentication.CustomException.BadRequestException;
 import com.example.RoleBasedJwtAuthentication.Dto.ZoneDto;
 import com.example.RoleBasedJwtAuthentication.Entity.Zone;
+import com.example.RoleBasedJwtAuthentication.HelperClass;
 import com.example.RoleBasedJwtAuthentication.Repository.UniversityRepository;
 import com.example.RoleBasedJwtAuthentication.Repository.ZoneRepository;
 import com.example.RoleBasedJwtAuthentication.Service.ZoneService;
@@ -16,7 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -52,18 +52,17 @@ public class ZoneServiceImpl implements ZoneService {
 
     @Override
     public ZoneDto getZoneById(String zoneId) {
-            Zone zone = zoneRepository.findById(zoneId).orElseThrow(() -> new javax.persistence.EntityNotFoundException("Zone does not exist."));
-            ZoneDto zoneDto = new ZoneDto();
-
-            modelMapper.map(zone, zoneDto);
-            zoneDto.setZoneName(null);
-            zoneDto.setState(null);
-            zoneDto.setCountOfUniversities(universityRepository.countByZoneZoneId(zoneId));
-            zoneDto.setCountOfColleges(universityRepository.countCollegesByZoneId(zoneId));
-            zoneDto.setCountOfStudents(universityRepository.countOfStudentsByZoneId(zoneId));
-            zoneDto.setCountOfDepartments(universityRepository.countOfDepartmentByZoneId(zoneId));
-            zoneDto.setCountOfProfessors(universityRepository.countOfProfessorByZoneId(zoneId));
-            return zoneDto;
+        Zone zone = zoneRepository.findById(zoneId).orElseThrow(() -> new javax.persistence.EntityNotFoundException("Zone does not exist."));
+        HelperClass helperClass = new HelperClass();
+        ZoneDto zoneDto = new ZoneDto();
+        modelMapper.map(zone, zoneDto);
+        zoneDto= helperClass.nullZoneNameAndCity(zoneDto);
+        zoneDto.setCountOfUniversities(universityRepository.countByZoneZoneId(zoneId));
+        zoneDto.setCountOfColleges(universityRepository.countCollegesByZoneId(zoneId));
+        zoneDto.setCountOfStudents(universityRepository.countOfStudentsByZoneId(zoneId));
+        zoneDto.setCountOfDepartments(universityRepository.countOfDepartmentByZoneId(zoneId));
+        zoneDto.setCountOfProfessors(universityRepository.countOfProfessorByZoneId(zoneId));
+        return zoneDto;
     }
 
     @Override
@@ -71,13 +70,15 @@ public class ZoneServiceImpl implements ZoneService {
         int pageSize = 5;
         Pageable pageable = PageRequest.of(pageNo -1, pageSize);
         Page<Zone> zoneList = zoneRepository.findAll(pageable);
-        //without using lambda
+        List<ZoneDto> zoneDtoPage = zoneList.stream().map((Zone zone) -> new ZoneDto(zone.getZoneId(), zone.getZoneFullName())).collect(Collectors.toList());
+        return new PageImpl<>(zoneDtoPage, pageable, zoneDtoPage.size());
+    }
+}
+
+
+//without using lambda
 //        zoneList.stream().map(new Function<Zone, ZoneDto>() {
 //            @Override
 //            public ZoneDto apply(Zone zone) {
 //                return new ZoneDto(zone.getZoneId(), zone.getZoneFullName());
 //        });
-        List<ZoneDto> zoneDtoPage = zoneList.stream().map((Zone zone) -> new ZoneDto(zone.getZoneId(), zone.getZoneFullName())).collect(Collectors.toList());
-        return new PageImpl<>(zoneDtoPage, pageable, zoneDtoPage.size());
-    }
-}

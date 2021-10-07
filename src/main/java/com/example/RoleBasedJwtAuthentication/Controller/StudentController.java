@@ -1,7 +1,6 @@
 package com.example.RoleBasedJwtAuthentication.Controller;
 
 import com.example.RoleBasedJwtAuthentication.CustomException.EntityNotFoundException;
-import com.example.RoleBasedJwtAuthentication.Dto.CollegeDto;
 import com.example.RoleBasedJwtAuthentication.Dto.StudentDto;
 import com.example.RoleBasedJwtAuthentication.Service.StudentService;
 import lombok.RequiredArgsConstructor;
