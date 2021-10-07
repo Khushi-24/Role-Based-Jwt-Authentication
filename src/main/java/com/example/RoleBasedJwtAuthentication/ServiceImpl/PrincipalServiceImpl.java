@@ -46,6 +46,7 @@ public class PrincipalServiceImpl implements PrincipalService {
                 }else{
                     Principal principal = new Principal();
                     User user = new User();
+                    modelMapper.getConfiguration().setAmbiguityIgnored(true);
                     modelMapper.map(principalDto, principal);
                     principal.setPrincipalPassword(getEncodedPassword(principalDto.getPrincipalPassword()));
                     principalRepository.save(principal);

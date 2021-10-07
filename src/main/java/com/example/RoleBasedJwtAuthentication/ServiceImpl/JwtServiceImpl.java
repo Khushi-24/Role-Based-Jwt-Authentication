@@ -1,12 +1,13 @@
 package com.example.RoleBasedJwtAuthentication.ServiceImpl;
 
+import com.example.RoleBasedJwtAuthentication.CustomException.BadRequestException;
 import com.example.RoleBasedJwtAuthentication.Dto.JwtRequest;
 import com.example.RoleBasedJwtAuthentication.Dto.JwtResponse;
-import com.example.RoleBasedJwtAuthentication.Entity.Student;
 import com.example.RoleBasedJwtAuthentication.Entity.User;
 import com.example.RoleBasedJwtAuthentication.Repository.UserRepository;
 import com.example.RoleBasedJwtAuthentication.Util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -51,11 +52,16 @@ public class JwtServiceImpl implements UserDetailsService {
         User user = userRepository.findById(userName).get();
 
         if (user != null) {
-            return new org.springframework.security.core.userdetails.User(
-                    user.getUserName(),
-                    user.getUserPassword(),
-                    getAuthority(user)
-            );
+            if(user.isEnabled()) {
+                return new org.springframework.security.core.userdetails.User(
+                        user.getUserName(),
+                        user.getUserPassword(),
+                        getAuthority(user)
+                );
+            }
+            else{
+                throw new BadRequestException(HttpStatus.BAD_REQUEST, "USER_DISABLED");
+            }
         } else {
             throw new UsernameNotFoundException("User not found with username: " + userName);
         }
@@ -80,4 +86,5 @@ public class JwtServiceImpl implements UserDetailsService {
             throw new Exception("INVALID_CREDENTIALS", e);
         }
     }
+
 }

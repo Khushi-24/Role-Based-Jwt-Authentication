@@ -22,4 +22,10 @@ public class User {
 
     @Column
     private String userRole;
+
+    private boolean  enabled = true;
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 }

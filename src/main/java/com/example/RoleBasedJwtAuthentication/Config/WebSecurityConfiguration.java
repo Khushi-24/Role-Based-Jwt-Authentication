@@ -31,37 +31,31 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     private  JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @Autowired
+    private  JwtRequestFilter jwtRequestFilter;
+
+    @Autowired
     private  UserDetailsService jwtService;
 
-    @Override
     @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception {
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception{
         return super.authenticationManagerBean();
     }
 
-    private String[] get8081Filters() {
-        ArrayList<String> list = new ArrayList<>();
-        //list.add("/api/**");
-        list.add("/**");
-        return list.toArray(new String[list.size()]);
-    }
-
-    @Bean
-    public JwtRequestFilter jwtRequestFilter() {
-        return new JwtRequestFilter();
-    }
-
     @Override
-    protected void configure(HttpSecurity http) throws Exception{
-        http.cors();
-        http.csrf().disable()
+    protected void configure(HttpSecurity httpSecurity) throws Exception{
+        httpSecurity.cors();
+        httpSecurity.csrf().disable()
                 .authorizeRequests().antMatchers("/authenticate", "/addUser").permitAll()
                 .antMatchers(HttpHeaders.ALLOW).permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.addFilterBefore(jwtRequestFilter(), UsernamePasswordAuthenticationFilter.class);
+                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        ;
+
+        httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean
