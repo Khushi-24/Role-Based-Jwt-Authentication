@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Getter
 @Setter
@@ -22,9 +23,6 @@ public class StudentDto {
     @NotNull(message = "Student semester can't be null.")
     private Long semester;
 
-    @NotNull(message = "Student cpi can't be null.")
-    private Float cpi;
-
     @NotNull(message = "Student password can't be null.")
     private String studentPassword;
 
@@ -35,4 +33,6 @@ public class StudentDto {
         this.studentId = studentId;
         this.studentName = studentName;
     }
+
+    private CpiDto cpiDto;
 }

@@ -10,7 +10,7 @@ public interface StudentService {
 
     Page<StudentDto> getAllStudents(int pageNo);
 
-    int getStudentHavingCpiGreaterThan(float cpi);
-
-    int getStudentHavingCpiLessThan(float cpi);
+//    int getStudentHavingCpiGreaterThan(float cpi);
+//
+//    int getStudentHavingCpiLessThan(float cpi);
 }

@@ -1,6 +1,7 @@
 package com.example.RoleBasedJwtAuthentication.Controller;
 
 import com.example.RoleBasedJwtAuthentication.CustomException.EntityNotFoundException;
+import com.example.RoleBasedJwtAuthentication.Dto.CpiDto;
 import com.example.RoleBasedJwtAuthentication.Dto.StudentDto;
 import com.example.RoleBasedJwtAuthentication.Service.StudentService;
 import lombok.RequiredArgsConstructor;
@@ -8,8 +9,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -20,7 +23,7 @@ public class StudentController {
 
     @PostMapping("/addStudent")
     @PreAuthorize("hasAnyRole('Teacher','Principal')")
-    public ResponseEntity<?> addStudent(@RequestBody StudentDto studentDto){
+    public ResponseEntity<?> addStudent(@Validated(value = CpiDto.AddStudent.class) @RequestBody StudentDto studentDto){
         StudentDto dto = studentService.addStudent(studentDto);
         return  new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
@@ -42,7 +45,7 @@ public class StudentController {
         }
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
-
+/*
     @GetMapping("/getStudentHavingCpiGreaterThan/{cpi}")
     @PreAuthorize("hasAnyRole('Teacher','Principal')")
     public ResponseEntity<?> getStudentHavingCpiGreaterThan(@PathVariable float cpi){
@@ -56,4 +59,6 @@ public class StudentController {
         int count= studentService.getStudentHavingCpiLessThan(cpi);
         return new ResponseEntity<>(count, HttpStatus.OK);
     }
+
+ */
 }

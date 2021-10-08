@@ -31,6 +31,7 @@ public class StudentServiceImpl implements StudentService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper = new ModelMapper();
     private final PasswordEncoder passwordEncoder;
+    private final CpiRepository cpiRepository;
 
 
     @Override
@@ -40,25 +41,29 @@ public class StudentServiceImpl implements StudentService {
             Department department = departmentRepository.findById(studentDto.getCollegeDepartment().getDepartmentId()).orElseThrow(()-> new EntityNotFoundException(HttpStatus.NOT_FOUND, "Department doesn't exists. "));
             if(collegeDepartmentRepository.existsByCollegeAndDepartment(college, department)){
                 CollegeDepartment collegeDepartment = collegeDepartmentRepository.findByCollegeIdAndDepartmentId(college.getCollegeId(), department.getDepartmentId());
-                Student student = new Student();
-                student.setStudentId(studentDto.getStudentId());
-                student.setStudentName(studentDto.getStudentName());
-                student.setSemester(studentDto.getSemester());
-                student.setCpi(studentDto.getCpi());
-                student.setStudentPassword(getEncodedPassword(studentDto.getStudentPassword()));
-                student.setCollegeDepartment(collegeDepartment);
-                if(!userRepository.existsById(studentDto.getStudentId())){
-                    User user = new User();
-                    user.setUserName(student.getStudentId());
-                    user.setUserPassword(student.getStudentPassword());
-                    user.setUserRole("student");
-                    userRepository.save(user);
-                    studentRepository.save(student);
-                    studentDto.setStudentPassword("");
-                    return studentDto;
-                }else{
-                    throw new EntityAlreadyExistsException(HttpStatus.CONFLICT, "UserId is already occupied.");
-                }
+                    Student student = new Student();
+                    student.setStudentId(studentDto.getStudentId());
+                    student.setStudentName(studentDto.getStudentName());
+                    student.setSemester(studentDto.getSemester());
+//                student.setCpi(studentDto.getCpi());
+                    student.setStudentPassword(getEncodedPassword(studentDto.getStudentPassword()));
+                    student.setCollegeDepartment(collegeDepartment);
+                    Cpi cpi = new Cpi();
+                    CpiDto cpiDto = studentDto.getCpiDto();
+                    modelMapper.map(cpiDto, cpi);
+                    cpiRepository.save(cpi);
+                    if (!userRepository.existsById(studentDto.getStudentId())) {
+                        User user = new User();
+                        user.setUserName(student.getStudentId());
+                        user.setUserPassword(student.getStudentPassword());
+                        user.setUserRole("student");
+                        userRepository.save(user);
+                        studentRepository.save(student);
+                        studentDto.setStudentPassword("");
+                        return studentDto;
+                    } else {
+                        throw new EntityAlreadyExistsException(HttpStatus.CONFLICT, "UserId is already occupied.");
+                    }
 
             }else{
                 throw new EntityNotFoundException(HttpStatus.NOT_FOUND, "College and department pair doesn't match.");
@@ -79,7 +84,6 @@ public class StudentServiceImpl implements StudentService {
         modelMapper.getConfiguration().setAmbiguityIgnored(true);
         modelMapper.map(student, studentDto);
         studentDto.setSemester(null);
-        studentDto.setCpi(null);
         studentDto.setStudentPassword(null);
         CollegeDepartmentDto dto = studentDto.getCollegeDepartment();
         dto.setDepartmentId(null);
@@ -110,7 +114,7 @@ public class StudentServiceImpl implements StudentService {
                         )).collect(Collectors.toList());
         return new PageImpl<>(studentDtoList,  pageable, studentDtoList.size());
     }
-
+/*
     @Override
     public int getStudentHavingCpiGreaterThan(float cpi) {
         if(cpi >=10){
@@ -131,8 +135,55 @@ public class StudentServiceImpl implements StudentService {
         }
     }
 
+ */
+
     public String getEncodedPassword(String password) {
         return passwordEncoder.encode(password);
     }
 
 }
+
+
+
+
+
+
+
+/*
+ @Override
+    public StudentDto addStudent(StudentDto studentDto) {
+        if(!studentRepository.existsById(studentDto.getStudentId())){
+            College college = collegeRepository.findById(studentDto.getCollegeDepartment().getCollegeId().longValue()).orElseThrow(()-> new EntityNotFoundException(HttpStatus.NOT_FOUND, "College doesn't exists. "));
+            Department department = departmentRepository.findById(studentDto.getCollegeDepartment().getDepartmentId()).orElseThrow(()-> new EntityNotFoundException(HttpStatus.NOT_FOUND, "Department doesn't exists. "));
+            if(collegeDepartmentRepository.existsByCollegeAndDepartment(college, department)){
+                CollegeDepartment collegeDepartment = collegeDepartmentRepository.findByCollegeIdAndDepartmentId(college.getCollegeId(), department.getDepartmentId());
+                Student student = new Student();
+                student.setStudentId(studentDto.getStudentId());
+                student.setStudentName(studentDto.getStudentName());
+                student.setSemester(studentDto.getSemester());
+//                student.setCpi(studentDto.getCpi());
+                student.setStudentPassword(getEncodedPassword(studentDto.getStudentPassword()));
+                student.setCollegeDepartment(collegeDepartment);
+                if(!userRepository.existsById(studentDto.getStudentId())){
+                    User user = new User();
+                    user.setUserName(student.getStudentId());
+                    user.setUserPassword(student.getStudentPassword());
+                    user.setUserRole("student");
+                    userRepository.save(user);
+                    studentRepository.save(student);
+                    studentDto.setStudentPassword("");
+                    return studentDto;
+                }else{
+                    throw new EntityAlreadyExistsException(HttpStatus.CONFLICT, "UserId is already occupied.");
+                }
+
+            }else{
+                throw new EntityNotFoundException(HttpStatus.NOT_FOUND, "College and department pair doesn't match.");
+            }
+        }
+        else{
+            throw new EntityAlreadyExistsException(HttpStatus.CONFLICT, "Student already exists.");
+        }
+
+    }
+ */

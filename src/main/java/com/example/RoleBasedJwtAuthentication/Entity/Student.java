@@ -1,5 +1,6 @@
 package com.example.RoleBasedJwtAuthentication.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,13 +21,14 @@ public class Student {
     private Long semester;
 
     @Column
-    private Float cpi;
-
-    @Column
     private String studentPassword;
 
     @ManyToOne
     @JoinColumn(name = "collegeDepartmentId", referencedColumnName = "collegeDepartmentId")
     private CollegeDepartment collegeDepartment;
+
+    @JsonIgnore
+    @OneToOne(mappedBy = "student")
+    private Cpi cpi;
 
 }
