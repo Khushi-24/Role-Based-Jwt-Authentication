@@ -1,9 +1,9 @@
 package com.example.RoleBasedJwtAuthentication.ServiceImpl;
 
 import com.example.RoleBasedJwtAuthentication.CustomException.BadRequestException;
+import com.example.RoleBasedJwtAuthentication.CustomException.EntityNotFoundException;
 import com.example.RoleBasedJwtAuthentication.Dto.ZoneDto;
 import com.example.RoleBasedJwtAuthentication.Entity.Zone;
-import com.example.RoleBasedJwtAuthentication.HelperClass;
 import com.example.RoleBasedJwtAuthentication.Repository.UniversityRepository;
 import com.example.RoleBasedJwtAuthentication.Repository.ZoneRepository;
 import com.example.RoleBasedJwtAuthentication.Service.ZoneService;
@@ -52,11 +52,11 @@ public class ZoneServiceImpl implements ZoneService {
 
     @Override
     public ZoneDto getZoneById(String zoneId) {
-        Zone zone = zoneRepository.findById(zoneId).orElseThrow(() -> new javax.persistence.EntityNotFoundException("Zone does not exist."));
-        HelperClass helperClass = new HelperClass();
+        Zone zone = zoneRepository.findById(zoneId).orElseThrow(() -> new EntityNotFoundException(HttpStatus.NOT_FOUND,"Zone does not exist."));
         ZoneDto zoneDto = new ZoneDto();
         modelMapper.map(zone, zoneDto);
-        zoneDto= helperClass.nullZoneNameAndCity(zoneDto);
+        zoneDto.setZoneName(null);
+        zoneDto.setState(null);
         zoneDto.setCountOfUniversities(universityRepository.countByZoneZoneId(zoneId));
         zoneDto.setCountOfColleges(universityRepository.countCollegesByZoneId(zoneId));
         zoneDto.setCountOfStudents(universityRepository.countOfStudentsByZoneId(zoneId));

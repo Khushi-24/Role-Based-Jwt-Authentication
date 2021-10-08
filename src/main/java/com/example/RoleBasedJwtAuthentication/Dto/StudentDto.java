@@ -31,21 +31,8 @@ public class StudentDto {
     @NotNull(message = "Department Id can't be null.")
     private CollegeDepartmentDto collegeDepartment;
 
-    private String collegeName;
-
-    private String departmentName;
-
-    private String universityName;
-
-    private String zoneFullName;
-
-    public StudentDto(String studentId, String studentName, String collegeName, String departmentName, String universityName, String zoneFullName) {
-
+    public StudentDto(String studentId, String studentName) {
         this.studentId = studentId;
         this.studentName = studentName;
-        this.collegeName = collegeName;
-        this.departmentName = departmentName;
-        this.universityName = universityName;
-        this.zoneFullName = zoneFullName;
     }
 }

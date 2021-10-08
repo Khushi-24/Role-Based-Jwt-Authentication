@@ -74,7 +74,7 @@ public class ProfessorServiceImpl implements ProfessorService {
 
     @Override
     public ProfessorDto getProfessorById(String professorId) {
-        Professor professor = professorRepository.findById(professorId).orElseThrow(() -> new javax.persistence.EntityNotFoundException("Professor does not exist."));
+        Professor professor = professorRepository.findById(professorId).orElseThrow(() -> new EntityNotFoundException(HttpStatus.NOT_FOUND,"Professor does not exist."));
         ProfessorDto professorDto = new ProfessorDto();
         modelMapper.map(professor, professorDto);
         professorDto.setCountOfDepartment(professorDepartmentRepository.countByProfessorProfessorId(professorId));

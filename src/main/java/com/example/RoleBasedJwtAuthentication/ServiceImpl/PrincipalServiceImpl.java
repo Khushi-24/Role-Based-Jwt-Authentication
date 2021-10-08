@@ -8,7 +8,6 @@ import com.example.RoleBasedJwtAuthentication.Dto.UniversityDto;
 import com.example.RoleBasedJwtAuthentication.Dto.ZoneDto;
 import com.example.RoleBasedJwtAuthentication.Entity.Principal;
 import com.example.RoleBasedJwtAuthentication.Entity.User;
-import com.example.RoleBasedJwtAuthentication.HelperClass;
 import com.example.RoleBasedJwtAuthentication.Repository.CollegeRepository;
 import com.example.RoleBasedJwtAuthentication.Repository.PrincipalRepository;
 import com.example.RoleBasedJwtAuthentication.Repository.UserRepository;
@@ -70,14 +69,17 @@ public class PrincipalServiceImpl implements PrincipalService {
 
     @Override
     public PrincipalDto getPrincipalByPrincipalId(String principalId) {
-        HelperClass helperClass = new HelperClass();
-        Principal principal = principalRepository.findById(principalId).orElseThrow(() -> new javax.persistence.EntityNotFoundException("Principal does not exist."));
+        Principal principal = principalRepository.findById(principalId).orElseThrow(() -> new EntityNotFoundException(HttpStatus.NOT_FOUND ,"Principal does not exist."));
         PrincipalDto principalDto = new PrincipalDto();
         modelMapper.map(principal, principalDto);
         principalDto.setPrincipalPassword(null);
-        CollegeDto dto = helperClass.nullUniversityNameAndCollegeCity(principalDto.getCollege());
-        UniversityDto universityDto = helperClass.nullUniversityCityAndZoneFullName(dto.getUniversity());
-        ZoneDto zoneDto = helperClass.nullZoneNameAndCity(universityDto.getZone());
+        CollegeDto dto = principalDto.getCollege();
+        dto.setCollegeCity(null);
+        UniversityDto universityDto = dto.getUniversity();
+        universityDto.setUniversityCity(null);
+        ZoneDto zoneDto = universityDto.getZone();
+        zoneDto.setZoneName(null);
+        zoneDto.setState(null);
         universityDto.setZone(zoneDto);
         dto.setUniversity(universityDto);
         principalDto.setCollege(dto);
@@ -93,10 +95,8 @@ public class PrincipalServiceImpl implements PrincipalService {
         List<PrincipalDto> principalDtoList = principals.stream().map((Principal principal) ->
                 new PrincipalDto(
                         principal.getPrincipalId(),
-                        principal.getPrincipalName(),
-                        principal.getCollege().getCollegeName(),
-                        principal.getCollege().getUniversity().getUniversityName(),
-                        principal.getCollege().getUniversity().getZone().getZoneFullName())).collect(Collectors.toList());
+                        principal.getPrincipalName()
+                        )).collect(Collectors.toList());
         return new PageImpl<>(principalDtoList,  pageable, principalDtoList.size());
     }
 

@@ -25,8 +25,6 @@ public class UniversityDto {
     @NotBlank(message = "Please mention zone code for university.")
     private ZoneDto zone;
 
-    private String zoneFullName;
-
     private Long countOfColleges;
 
     private Long countOfStudents;
@@ -35,11 +33,8 @@ public class UniversityDto {
 
     private Long countOfProfessors;
 
-    public UniversityDto(String universityId, String universityName, String zoneFullName) {
+    public UniversityDto(String universityId, String universityName) {
         this.universityId = universityId;
         this.universityName = universityName;
-        this.zoneFullName = zoneFullName;
     }
-
-
 }

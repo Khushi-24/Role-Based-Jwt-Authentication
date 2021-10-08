@@ -30,23 +30,14 @@ public class CollegeDto {
     @JoinColumn(name = "universityID", referencedColumnName = "universityId")
     private UniversityDto university;
 
-    private String universityName;
-
-    private String zoneFullName;
-
     private Long countOfStudent;
-
-    private Long countOfPrincipal;
 
     private Long countOfDepartment;
 
     private Long countOfProfessors;
 
-    public CollegeDto(Long collegeId, String collegeName, String universityName, String zoneFullName) {
-
+    public CollegeDto(Long collegeId, String collegeName) {
         this.collegeId = collegeId;
         this.collegeName = collegeName;
-        this.universityName = universityName;
-        this.zoneFullName = zoneFullName;
     }
 }

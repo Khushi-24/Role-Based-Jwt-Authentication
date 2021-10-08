@@ -5,7 +5,6 @@ import com.example.RoleBasedJwtAuthentication.CustomException.EntityAlreadyExist
 import com.example.RoleBasedJwtAuthentication.CustomException.EntityNotFoundException;
 import com.example.RoleBasedJwtAuthentication.Dto.*;
 import com.example.RoleBasedJwtAuthentication.Entity.*;
-import com.example.RoleBasedJwtAuthentication.HelperClass;
 import com.example.RoleBasedJwtAuthentication.Repository.*;
 import com.example.RoleBasedJwtAuthentication.Service.StudentService;
 import lombok.RequiredArgsConstructor;
@@ -74,25 +73,28 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public StudentDto getStudentByStudentId(String studentId) {
 
-        HelperClass helperClass = new HelperClass();
-        Student student = studentRepository.findById(studentId).orElseThrow(() -> new javax.persistence.EntityNotFoundException("Student does not exist."));
+        Student student = studentRepository.findById(studentId).orElseThrow(() -> new EntityNotFoundException(HttpStatus.NOT_FOUND,"Student does not exist."));
         System.out.println(student.getCollegeDepartment());
         StudentDto studentDto = new StudentDto();
         modelMapper.getConfiguration().setAmbiguityIgnored(true);
         modelMapper.map(student, studentDto);
-        studentDto = helperClass.nullStudentSemesterAndCpiAndPassword(studentDto);
+        studentDto.setSemester(null);
+        studentDto.setCpi(null);
+        studentDto.setStudentPassword(null);
         CollegeDepartmentDto dto = studentDto.getCollegeDepartment();
         dto.setDepartmentId(null);
-        DepartmentDto departmentDto = helperClass.nullDepartmentDuration(dto.getDepartment());
+        DepartmentDto departmentDto =dto.getDepartment();
+        departmentDto.setDuration(null);
         dto.setDepartment(departmentDto);
-        CollegeDto collegeDto = helperClass.nullUniversityNameAndCollegeCity(dto.getCollege());
-        UniversityDto universityDto = helperClass.nullUniversityCityAndZoneFullName(collegeDto.getUniversity());
-        universityDto.setZone(null);
+        CollegeDto collegeDto =dto.getCollege();
+        collegeDto.setCollegeCity(null);
+        UniversityDto universityDto = collegeDto.getUniversity();
+        universityDto.setUniversityCity(null);
+        ZoneDto zoneDto = universityDto.getZone();
+        zoneDto.setZoneName(null);
+        zoneDto.setState(null);
         collegeDto.setUniversity(universityDto);
-        collegeDto.setUniversityName(null);
         dto.setCollege(collegeDto);
-        studentDto.setCollegeName(null);
-        studentDto.setDepartmentName(null);
         return studentDto;
     }
 
@@ -104,11 +106,7 @@ public class StudentServiceImpl implements StudentService {
         List<StudentDto> studentDtoList = students.stream().map((Student student) ->
                 new StudentDto(
                         student.getStudentId(),
-                        student.getStudentName(),
-                        student.getCollegeDepartment().getCollege().getCollegeName(),
-                        student.getCollegeDepartment().getDepartment().getDepartmentName(),
-                        student.getCollegeDepartment().getCollege().getUniversity().getUniversityName(),
-                        student.getCollegeDepartment().getCollege().getUniversity().getZone().getZoneFullName()
+                        student.getStudentName()
                         )).collect(Collectors.toList());
         return new PageImpl<>(studentDtoList,  pageable, studentDtoList.size());
     }
