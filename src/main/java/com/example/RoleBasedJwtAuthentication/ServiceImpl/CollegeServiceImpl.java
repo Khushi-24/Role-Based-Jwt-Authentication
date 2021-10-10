@@ -61,8 +61,8 @@ public class CollegeServiceImpl implements CollegeService {
     @Override
     public void addDepartmentToCollege(CollegeDepartmentDto collegeDepartmentDto) {
 
-        College college = collegeRepository.findById(collegeDepartmentDto.getCollegeId()).orElseThrow(() -> new EntityNotFoundException(HttpStatus.NOT_FOUND, "College doesn't exists."));
-        Department department = departmentRepository.findById(collegeDepartmentDto.getDepartmentId()).orElseThrow(() -> new EntityNotFoundException(HttpStatus.NOT_FOUND, "Department doesn't exists"));
+        College college = collegeRepository.findById(collegeDepartmentDto.getClgId()).orElseThrow(() -> new EntityNotFoundException(HttpStatus.NOT_FOUND, "College doesn't exists."));
+        Department department = departmentRepository.findById(collegeDepartmentDto.getDepId()).orElseThrow(() -> new EntityNotFoundException(HttpStatus.NOT_FOUND, "Department doesn't exists"));
         CollegeDepartment collegeDepartment = new CollegeDepartment(college, department);
         if (!collegeDepartmentRepository.existsByCollegeAndDepartment(college, department)) {
             collegeDepartmentRepository.save(collegeDepartment);

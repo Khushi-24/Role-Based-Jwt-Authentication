@@ -38,7 +38,7 @@ public class Cpi {
     @Column
     private Float sem8Cpi;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "studentId", referencedColumnName = "studentId")
     private Student student;
 }

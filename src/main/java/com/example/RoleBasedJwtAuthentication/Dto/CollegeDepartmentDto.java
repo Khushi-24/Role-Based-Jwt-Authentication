@@ -12,10 +12,10 @@ import javax.validation.constraints.NotBlank;
 public class CollegeDepartmentDto {
 
     @NotBlank(message = "College Id can't be null.")
-    private Long collegeId;
+    private Long clgId;
 
     @NotBlank(message = "Department Id can't be null.")
-    private Long departmentId;
+    private Long depId;
 
     private DepartmentDto department;
     private CollegeDto college;

@@ -28,7 +28,7 @@ public class Student {
     private CollegeDepartment collegeDepartment;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "student")
+    @OneToOne(mappedBy = "student",cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Cpi cpi;
 
 }
