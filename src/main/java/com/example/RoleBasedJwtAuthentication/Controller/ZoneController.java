@@ -28,11 +28,16 @@ public class ZoneController {
     }
 
     @GetMapping("/getZoneById/{zoneId}")
+//    @GetMapping(value = {EndPoints.Zone.GET_ZONE_BY_ID, EndPoints.Zone.GET_ZONE_BY_ID})
     @PreAuthorize("hasAnyRole('Teacher','Principal','student')")
     public ResponseEntity<?> getZoneById(@PathVariable String zoneId){
         ZoneDto dto = zoneService.getZoneById(zoneId);
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
+//    public ResponseEntity<?> getZoneById(@RequestAttribute(LogKeys.ZONE_ID) String zoneId){
+//        ZoneDto dto = zoneService.getZoneById(zoneId);
+//        return new ResponseEntity<>(dto, HttpStatus.OK);
+//    }
 
     @GetMapping("/getAllZones/{pageNo}")
     @PreAuthorize("hasAnyRole('Teacher','Principal','student')")
